@@ -8,11 +8,11 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<OrdersDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnection")));
+// builder.Services.AddAuthentication();
+// builder.Services.AddAuthorization();
 
 builder.Services
-    .AddInfrastructure()
+    .AddInfrastructure(builder.Configuration)
     .AddApplication();
 
 builder.Services.AddControllers();

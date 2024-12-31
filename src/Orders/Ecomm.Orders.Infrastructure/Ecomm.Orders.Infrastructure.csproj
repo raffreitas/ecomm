@@ -7,10 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.0" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.2" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Ecomm.Orders.Application\Ecomm.Orders.Application.csproj" />
       <ProjectReference Include="..\Ecomm.Orders.Domain\Ecomm.Orders.Domain.csproj" />
     </ItemGroup>
 
