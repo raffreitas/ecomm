@@ -21,7 +21,6 @@ public class OrderController : ControllerBase
     public async Task<IActionResult> CreateOrder(CreateOrderCommand command)
     {
         await _sender.Send(command);
-
         return Created();
     }
 }

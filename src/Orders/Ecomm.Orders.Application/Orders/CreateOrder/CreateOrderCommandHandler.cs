@@ -2,6 +2,8 @@
 using Ecomm.Orders.Domain.Entities;
 using Ecomm.Orders.Domain.Repositories;
 
+using FluentValidation;
+
 using MediatR;
 
 namespace Ecomm.Orders.Application.Orders.CreateOrder;
@@ -10,15 +12,25 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand>
 {
     private readonly IOrderRepository _orderRepository;
     private readonly IProductRepository _productRepository;
+    private readonly IValidator<CreateOrderCommand> _validator;
 
-    public CreateOrderCommandHandler(IOrderRepository orderRepository, IProductRepository productRepository)
+    public CreateOrderCommandHandler(
+        IOrderRepository orderRepository,
+        IProductRepository productRepository,
+        IValidator<CreateOrderCommand> validator)
     {
         _orderRepository = orderRepository;
         _productRepository = productRepository;
+        _validator = validator;
     }
 
     public async Task Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
+
         var uniqueProductIds = request.Items.Select(x => x.ProductId).ToHashSet();
 
         var products = await _productRepository.GetProductsByIdsAsync(uniqueProductIds, cancellationToken);

@@ -4,8 +4,8 @@ namespace Ecomm.Orders.Application.Orders.CreateOrder;
 
 public record CreateOrderCommand : IRequest
 {
-    public string CardHash { get; set; }
-    public IList<CreateOrderItem> Items { get; set; }
+    public string CardHash { get; set; } = string.Empty;
+    public IReadOnlyList<CreateOrderItem> Items { get; set; } = [];
 }
 
 public record CreateOrderItem
