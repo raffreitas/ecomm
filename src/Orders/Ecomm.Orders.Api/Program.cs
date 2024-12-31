@@ -1,3 +1,5 @@
+using Ecomm.Orders.Application;
+using Ecomm.Orders.Infrastructure;
 using Ecomm.Orders.Infrastructure.Persistence;
 
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<OrdersDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnection")));
+
+builder.Services
+    .AddInfrastructure()
+    .AddApplication();
 
 builder.Services.AddControllers();
 
