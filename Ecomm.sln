@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{78526D4C-9B31-43FF-B629-17330FD7B52F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{78D67944-F918-4D72-B9B7-401CAFD133CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecomm.Catalog.Api", "src\Catalog\Ecomm.Catalog.Api\Ecomm.Catalog.Api.csproj", "{5399A1A4-EE7B-4C26-949F-EBAE14529874}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Orders", "Orders", "{2CBA30DD-D49E-4847-AB0E-18205A341264}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{78D67944-F918-4D72-B9B7-401CAFD133CB} = {78526D4C-9B31-43FF-B629-17330FD7B52F}
+		{5399A1A4-EE7B-4C26-949F-EBAE14529874} = {78D67944-F918-4D72-B9B7-401CAFD133CB}
+		{2CBA30DD-D49E-4847-AB0E-18205A341264} = {78526D4C-9B31-43FF-B629-17330FD7B52F}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5399A1A4-EE7B-4C26-949F-EBAE14529874}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5399A1A4-EE7B-4C26-949F-EBAE14529874}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5399A1A4-EE7B-4C26-949F-EBAE14529874}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5399A1A4-EE7B-4C26-949F-EBAE14529874}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

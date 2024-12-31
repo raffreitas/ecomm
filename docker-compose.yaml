@@ -1,0 +1,12 @@
+services:
+  catalog.database:
+    image: bitnami/postgresql
+    container_name: catalog.database
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRESQL_DATABASE: catalog
+      POSTGRESQL_PASSWORD: postgres
+      POSTGRESQL_USERNAME: postgres
+      POSTGRESQL_TIMEZONE: America/Sao_Paulo
