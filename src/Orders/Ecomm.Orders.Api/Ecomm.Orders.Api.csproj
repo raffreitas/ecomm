@@ -16,10 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
-    </ItemGroup>
-
-    <ItemGroup>
+      <ProjectReference Include="..\Ecomm.Orders.Application\Ecomm.Orders.Application.csproj" />
       <ProjectReference Include="..\Ecomm.Orders.Infrastructure\Ecomm.Orders.Infrastructure.csproj" />
     </ItemGroup>
 
