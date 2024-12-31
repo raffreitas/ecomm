@@ -10,3 +10,14 @@ services:
       POSTGRESQL_PASSWORD: postgres
       POSTGRESQL_USERNAME: postgres
       POSTGRESQL_TIMEZONE: America/Sao_Paulo
+  orders.database:
+    image: bitnami/postgresql
+    container_name: orders.database
+    restart: always
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRESQL_DATABASE: orders
+      POSTGRESQL_PASSWORD: postgres
+      POSTGRESQL_USERNAME: postgres
+      POSTGRESQL_TIMEZONE: America/Sao_Paulo
