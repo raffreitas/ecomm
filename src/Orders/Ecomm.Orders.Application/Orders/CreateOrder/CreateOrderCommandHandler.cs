@@ -27,6 +27,8 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand>
     public async Task Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        // TODO: Inject service to get the customerId based on the user on request
+        var customerId = Guid.Empty;
 
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
@@ -44,7 +46,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand>
             return new CreateOrderItemDto(item.ProductId, item.Quantity, product.Price);
         });
 
-        var createOrderDto = new CreateOrderDto(orderItemsDto);
+        var createOrderDto = new CreateOrderDto(customerId, orderItemsDto);
         var order = Order.Create(createOrderDto);
 
         await _orderRepository.CreateAsync(order, cancellationToken);

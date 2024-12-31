@@ -8,10 +8,13 @@ public sealed class Order : Entity
 {
     public decimal Total { get; private set; }
     public OrderStatus Status { get; private set; }
+    public Guid CustomerId { get; private set; }
     public DateTime CreatedAt { get; private init; } = DateTime.UtcNow;
     public IList<OrderItem> Items { get; private set; } = [];
 
-    private Order()
+    public Customer Customer { get; private set; }
+
+    private Order(Guid customerId)
     {
         Status = OrderStatus.Pending;
     }
@@ -20,7 +23,7 @@ public sealed class Order : Entity
     {
         ArgumentNullException.ThrowIfNull(createOrderDto);
 
-        var order = new Order();
+        var order = new Order(createOrderDto.CustomerId);
 
         foreach (var item in createOrderDto.Items)
         {
