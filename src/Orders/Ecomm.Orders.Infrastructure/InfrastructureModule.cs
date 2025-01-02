@@ -1,12 +1,13 @@
-﻿using Ecomm.Orders.Application.Identity.Services;
+﻿using Ecomm.Orders.Application.Abstractions;
+using Ecomm.Orders.Application.Identity.Services;
 using Ecomm.Orders.Domain.Repositories;
 using Ecomm.Orders.Infrastructure.Identity;
 using Ecomm.Orders.Infrastructure.Identity.Services;
+using Ecomm.Orders.Infrastructure.MessageBus;
 using Ecomm.Orders.Infrastructure.Persistence;
 using Ecomm.Orders.Infrastructure.Persistence.Repositories;
 
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,7 @@ public static class InfrastructureModule
         return services
             .AddDatabase(configuration)
             .AddRepositories()
+            .AddMessageBus()
             .AddAuthentication();
     }
 
@@ -41,6 +43,12 @@ public static class InfrastructureModule
         services.AddDbContext<AppIdentityDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DatabaseConnection")));
 
+        return services;
+    }
+
+    private static IServiceCollection AddMessageBus(this IServiceCollection services)
+    {
+        services.AddScoped<IMessageBusService, RabbitMqMessageBusService>();
         return services;
     }
 

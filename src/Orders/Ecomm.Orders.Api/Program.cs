@@ -1,8 +1,5 @@
 using Ecomm.Orders.Application;
 using Ecomm.Orders.Infrastructure;
-using Ecomm.Orders.Infrastructure.Persistence;
-
-using Microsoft.EntityFrameworkCore;
 
 using Scalar.AspNetCore;
 
