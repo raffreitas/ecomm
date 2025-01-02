@@ -1,5 +1,6 @@
 ﻿using Ecomm.Orders.Domain.DTOs;
 using Ecomm.Orders.Domain.Enums;
+using Ecomm.Orders.Domain.Events;
 using Ecomm.Orders.Domain.Primitives;
 
 namespace Ecomm.Orders.Domain.Entities;
@@ -16,6 +17,7 @@ public sealed class Order : Entity
 
     private Order(Guid customerId)
     {
+        CustomerId = customerId;
         Status = OrderStatus.Pending;
     }
 
@@ -29,6 +31,8 @@ public sealed class Order : Entity
         {
             order.AddItem(new OrderItem(item.Quantity, item.UnitPrice, item.ProductId, order.Id));
         }
+
+        order.Raise(new OrderCreatedDomainEvent(order.Id, createOrderDto.CardHash, order.Total));
 
         return order;
     }

@@ -28,7 +28,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand>
     {
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         // TODO: Inject service to get the customerId based on the user on request
-        var customerId = Guid.Empty;
+        var customerId = Guid.Parse("977dc239-f940-47ae-9170-eeb32b3f33d6");
 
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
@@ -46,7 +46,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand>
             return new CreateOrderItemDto(item.ProductId, item.Quantity, product.Price);
         });
 
-        var createOrderDto = new CreateOrderDto(customerId, orderItemsDto);
+        var createOrderDto = new CreateOrderDto(customerId, request.CardHash, orderItemsDto);
         var order = Order.Create(createOrderDto);
 
         await _orderRepository.CreateAsync(order, cancellationToken);
