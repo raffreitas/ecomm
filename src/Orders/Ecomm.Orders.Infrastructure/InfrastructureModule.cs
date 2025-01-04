@@ -39,6 +39,8 @@ public static class InfrastructureModule
     private static IServiceCollection AddMessageConsumers(this IServiceCollection services)
     {
         services.AddHostedService<CustomerCreatedConsumer>();
+        services.AddHostedService<ProductCreatedConsumer>();
+
         return services;
     }
 

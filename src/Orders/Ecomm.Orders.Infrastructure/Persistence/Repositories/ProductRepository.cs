@@ -19,4 +19,10 @@ public class ProductRepository : IProductRepository
     {
         return await _dbContext.Products.Where(p => ids.Contains(p.Id)).ToListAsync(cancellationToken);
     }
+
+    public async Task CreateAsync(Product product, CancellationToken cancellationToken = default)
+    {
+        await _dbContext.Products.AddAsync(product, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
 }
