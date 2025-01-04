@@ -32,6 +32,17 @@ services:
       POSTGRESQL_PASSWORD: postgres
       POSTGRESQL_USERNAME: postgres
       POSTGRESQL_TIMEZONE: America/Sao_Paulo
+  customers.database:
+    image: bitnami/postgresql
+    container_name: customers.database
+    restart: always
+    ports:
+      - 5435:5432
+    environment:
+      POSTGRESQL_DATABASE: customers
+      POSTGRESQL_PASSWORD: postgres
+      POSTGRESQL_USERNAME: postgres
+      POSTGRESQL_TIMEZONE: America/Sao_Paulo
 
   rabbitmq:
     image: rabbitmq:3.12-management
