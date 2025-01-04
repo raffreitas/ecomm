@@ -1,6 +1,7 @@
 ﻿using Ecomm.Orders.Application.Abstractions;
 using Ecomm.Orders.Domain.Repositories;
 using Ecomm.Orders.Infrastructure.MessageBus;
+using Ecomm.Orders.Infrastructure.MessageBus.Consumers;
 using Ecomm.Orders.Infrastructure.Persistence;
 using Ecomm.Orders.Infrastructure.Persistence.Repositories;
 
@@ -17,7 +18,8 @@ public static class InfrastructureModule
         return services
             .AddDatabase(configuration)
             .AddRepositories()
-            .AddMessageBus();
+            .AddMessageBus()
+            .AddMessageConsumers();
     }
 
     private static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
@@ -31,6 +33,12 @@ public static class InfrastructureModule
     private static IServiceCollection AddMessageBus(this IServiceCollection services)
     {
         services.AddScoped<IMessageBusService, RabbitMqMessageBusService>();
+        return services;
+    }
+
+    private static IServiceCollection AddMessageConsumers(this IServiceCollection services)
+    {
+        services.AddHostedService<CustomerCreatedConsumer>();
         return services;
     }
 
