@@ -1,4 +1,5 @@
 ﻿using Ecomm.Catalog.Api.Endpoints;
+using Ecomm.Catalog.Api.Messaging;
 using Ecomm.Catalog.Api.Persistence;
 using Ecomm.Catalog.Api.Persistence.Repositories;
 using Ecomm.Catalog.Api.Repositories;
@@ -30,6 +31,12 @@ public static class DependencyInjectionExtension
     {
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ICategoryService, CategoryService>();
+        return services;
+    }
+
+    public static IServiceCollection AddMessageBus(this IServiceCollection services)
+    {
+        services.AddScoped<IMessageBusService, RabbitMqMessageBusService>();
         return services;
     }
 

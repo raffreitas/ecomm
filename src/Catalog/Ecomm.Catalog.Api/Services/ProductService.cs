@@ -1,4 +1,8 @@
-﻿using Ecomm.Catalog.Api.Exceptions.Base;
+﻿using System.Text;
+using System.Text.Json;
+
+using Ecomm.Catalog.Api.Exceptions.Base;
+using Ecomm.Catalog.Api.Messaging;
 using Ecomm.Catalog.Api.Models;
 using Ecomm.Catalog.Api.Models.InputModel;
 using Ecomm.Catalog.Api.Models.ViewModels;
@@ -7,7 +11,10 @@ using Ecomm.Catalog.Api.Services.Contracts;
 
 namespace Ecomm.Catalog.Api.Services;
 
-public class ProductService(IProductRepository repository, ICategoryRepository categoryRepository) : IProductService
+public class ProductService(
+    IProductRepository repository,
+    ICategoryRepository categoryRepository,
+    IMessageBusService messageBusService) : IProductService
 {
     public async Task<IList<ProductViewModel>> GetProductsAsync(CancellationToken cancellationToken = default)
     {
@@ -62,9 +69,8 @@ public class ProductService(IProductRepository repository, ICategoryRepository c
     public async Task CreateProductAsync(CreateProductInputModel createProductInputModel,
         CancellationToken cancellationToken = default)
     {
-        var category =
-            await categoryRepository.GetCategoryByIdAsync(createProductInputModel.CategoryId, cancellationToken);
-        if (category is null)
+        var category = await categoryRepository.ExistsByIdAsync(createProductInputModel.CategoryId, cancellationToken);
+        if (!category)
             throw new NotFoundException("Category not found");
 
         var product = new Product
@@ -73,9 +79,15 @@ public class ProductService(IProductRepository repository, ICategoryRepository c
             Description = createProductInputModel.Description,
             Price = createProductInputModel.Price,
             ImageUrl = createProductInputModel.ImageUrl,
-            Category = category,
+            CategoryId = createProductInputModel.CategoryId,
         };
 
         await repository.CreateProductAsync(product, cancellationToken);
+
+        var productCreatedMessage = JsonSerializer.Serialize(product);
+        await messageBusService.PublishAsync(
+            queue: "product.created",
+            message: Encoding.UTF8.GetBytes(productCreatedMessage),
+            cancellationToken);
     }
 }
