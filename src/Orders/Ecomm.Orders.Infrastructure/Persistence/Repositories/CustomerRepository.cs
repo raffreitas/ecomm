@@ -1,20 +1,20 @@
 ﻿using Ecomm.Orders.Domain.Entities;
 using Ecomm.Orders.Domain.Repositories;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace Ecomm.Orders.Infrastructure.Persistence.Repositories;
 
-public class CustomerRepository : ICustomerRepository
+public class CustomerRepository(OrdersDbContext dbContext) : ICustomerRepository
 {
-    private readonly OrdersDbContext _dbContext;
-
-    public CustomerRepository(OrdersDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public async Task CreateAsync(Customer customer, CancellationToken cancellationToken = default)
     {
-        await _dbContext.Customers.AddAsync(customer, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await dbContext.Customers.AddAsync(customer, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<Customer?> GetByIdAsync(Guid customerId, CancellationToken cancellationToken = default)
+    {
+        return await dbContext.Customers.FirstOrDefaultAsync(x => x.Id.Equals(customerId), cancellationToken);
     }
 }

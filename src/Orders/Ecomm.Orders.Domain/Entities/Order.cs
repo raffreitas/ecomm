@@ -25,14 +25,18 @@ public sealed class Order : Entity
     {
         ArgumentNullException.ThrowIfNull(createOrderDto);
 
-        var order = new Order(createOrderDto.CustomerId);
+        var order = new Order(createOrderDto.Customer.Id);
 
         foreach (var item in createOrderDto.Items)
         {
             order.AddItem(new OrderItem(item.Quantity, item.UnitPrice, item.ProductId, order.Id));
         }
 
-        order.Raise(new OrderCreatedDomainEvent(order.Id, createOrderDto.CardHash, order.Total));
+        order.Raise(new OrderCreatedDomainEvent(
+            order.Id,
+            createOrderDto.Customer.Name,
+            createOrderDto.Customer.Email,
+            createOrderDto.CardHash, order.Total));
 
         return order;
     }

@@ -4,19 +4,15 @@ namespace Ecomm.Orders.Domain.Entities;
 
 public sealed class Product : Entity
 {
-    public string Name { get; init; }
-    public string Description { get; init; }
-    public decimal Price { get; init; }
-    public string ImageUrl { get; init; }
+    public string Name { get; private set; }
+    public decimal Price { get; private set; }
 
     // EF. Rel.
     public IList<OrderItem> OrderItems { get; private set; } = [];
 
-    public Product(string name, string description, decimal price, string imageUrl)
+    public Product(string name, decimal price)
     {
         Name = name;
-        Description = description;
         Price = price;
-        ImageUrl = imageUrl;
     }
 }

@@ -1,5 +1,7 @@
-﻿namespace Ecomm.Orders.Domain.DTOs;
+﻿using Ecomm.Orders.Domain.Entities;
 
-public record CreateOrderDto(Guid CustomerId, string CardHash, IEnumerable<CreateOrderItemDto> Items);
+namespace Ecomm.Orders.Domain.DTOs;
+
+public record CreateOrderDto(Customer Customer, string CardHash, IEnumerable<CreateOrderItemDto> Items);
 
 public record CreateOrderItemDto(Guid ProductId, int Quantity, decimal UnitPrice);
