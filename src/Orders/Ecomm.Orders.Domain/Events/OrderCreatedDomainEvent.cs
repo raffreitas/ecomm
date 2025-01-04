@@ -2,4 +2,9 @@
 
 namespace Ecomm.Orders.Domain.Events;
 
-public record OrderCreatedDomainEvent(Guid Id, string CardHash, decimal Total) : IDomainEvent;
+public record OrderCreatedDomainEvent(
+    Guid Id,
+    string CustomerName,
+    string CustomerEmail,
+    string CardHash,
+    decimal Total) : IDomainEvent;
