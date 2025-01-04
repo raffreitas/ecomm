@@ -23,4 +23,9 @@ public class CategoryRepository(CatalogDbContext dbContext) : ICategoryRepositor
         await dbContext.Categories.AddAsync(category, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<bool> ExistsByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await dbContext.Categories.AsNoTracking().AnyAsync(c => c.Id.Equals(id), cancellationToken);
+    }
 }

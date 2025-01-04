@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddDatabase(builder.Configuration)
     .AddRepositories()
+    .AddMessageBus()
     .AddServices();
 
 builder.Services.AddOpenApi();
