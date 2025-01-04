@@ -14,7 +14,6 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
 
         builder.Property(x => x.Name).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Email).IsRequired().HasMaxLength(50);
-        builder.Property(x => x.UserId).IsRequired();
 
         builder.HasMany(x => x.Orders)
             .WithOne(x => x.Customer);
