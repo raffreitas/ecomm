@@ -29,6 +29,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecomm.Payments.Domain", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecomm.Payments.Infrastructure", "src\Payments\Ecomm.Payments.Infrastructure\Ecomm.Payments.Infrastructure.csproj", "{41DCB676-519E-4D78-ABEA-AF302BA17A28}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Customers", "Customers", "{F4FAFEF4-AB0E-48AF-A12A-C2698D1752F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecomm.Customers.Api", "src\Customers\Ecomm.Customers.Api\Ecomm.Customers.Api.csproj", "{8011D515-B376-4F76-BE13-CF1BC0BA1ACB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +54,8 @@ Global
 		{74409C53-86D2-4840-AC71-0EC81A76C6F3} = {E80D44BB-F845-479A-B5C3-2B67BD9876F8}
 		{2D05F230-2C97-471A-A300-6A081AFBC259} = {E80D44BB-F845-479A-B5C3-2B67BD9876F8}
 		{41DCB676-519E-4D78-ABEA-AF302BA17A28} = {E80D44BB-F845-479A-B5C3-2B67BD9876F8}
+		{F4FAFEF4-AB0E-48AF-A12A-C2698D1752F9} = {78526D4C-9B31-43FF-B629-17330FD7B52F}
+		{8011D515-B376-4F76-BE13-CF1BC0BA1ACB} = {F4FAFEF4-AB0E-48AF-A12A-C2698D1752F9}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5399A1A4-EE7B-4C26-949F-EBAE14529874}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -88,5 +94,9 @@ Global
 		{41DCB676-519E-4D78-ABEA-AF302BA17A28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41DCB676-519E-4D78-ABEA-AF302BA17A28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41DCB676-519E-4D78-ABEA-AF302BA17A28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8011D515-B376-4F76-BE13-CF1BC0BA1ACB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8011D515-B376-4F76-BE13-CF1BC0BA1ACB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8011D515-B376-4F76-BE13-CF1BC0BA1ACB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8011D515-B376-4F76-BE13-CF1BC0BA1ACB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
