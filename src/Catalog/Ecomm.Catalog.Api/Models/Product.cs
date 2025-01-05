@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Ecomm.Catalog.Api.Models;
+﻿namespace Ecomm.Catalog.Api.Models;
 
 public sealed class Product
 {

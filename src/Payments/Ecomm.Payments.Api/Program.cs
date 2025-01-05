@@ -1,3 +1,4 @@
+using Ecomm.Payments.Api.Extensions;
 using Ecomm.Payments.Application;
 using Ecomm.Payments.Infrastructure;
 
@@ -20,6 +21,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
+    app.ApplyMigrations();
 }
 
 app.UseHttpsRedirection();
