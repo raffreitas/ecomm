@@ -1,12 +1,10 @@
+using Ecomm.Orders.Api.Extensions;
 using Ecomm.Orders.Application;
 using Ecomm.Orders.Infrastructure;
 
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// builder.Services.AddAuthentication();
-// builder.Services.AddAuthorization();
 
 builder.Services
     .AddInfrastructure(builder.Configuration)
@@ -22,6 +20,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
+    app.ApplyMigrations();
 }
 
 app.UseHttpsRedirection();

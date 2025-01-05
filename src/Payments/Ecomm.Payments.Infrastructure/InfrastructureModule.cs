@@ -9,8 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using RabbitMQ.Client;
-
 namespace Ecomm.Payments.Infrastructure;
 
 public static class InfrastructureModule

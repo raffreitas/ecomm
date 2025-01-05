@@ -40,6 +40,13 @@ public static class DependencyInjectionExtension
         return services;
     }
 
+    public static void ApplyMigrations(this IApplicationBuilder app)
+    {
+        using var scope = app.ApplicationServices.CreateScope();
+        using var context = scope.ServiceProvider.GetService<CatalogDbContext>();
+        context!.Database.Migrate();
+    }
+
     public static void MapEndpoints(this IEndpointRouteBuilder app)
     {
         app.MapProductEndpoints();
