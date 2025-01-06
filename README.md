@@ -74,7 +74,7 @@ O sistema é composto pelos seguintes microserviços:
 
 1. Clone este repositório:  
    ```bash
-   git clone https://github.com/raffreitasx/ecomm.git
+   git clone https://github.com/raffreitas/ecomm.git
    cd ecomm
    ```
 
@@ -84,12 +84,13 @@ O sistema é composto pelos seguintes microserviços:
    ```bash
    docker-compose up -d
    ```
-
+<!--  
 4. Acesse a documentação das APIs através do Scalar:  
    - Catalog: [http://localhost:8080/scalar/v1](http://localhost:8080/scalar/v1)  
    - Order: [http://localhost:8081/scalar/v1](http://localhost:8081/scalar/v1)  
    - Payments: [http://localhost:8082/scalar/v1](http://localhost:8082/scalar/v1)  
    - Customers: [http://localhost:8083/scalar/v1](http://localhost:8083/scalar/v1)  
+-->
 
 ---
 
