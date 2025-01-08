@@ -1,4 +1,6 @@
-﻿using Ecomm.Orders.Domain.Primitives;
+﻿using System.Text.Json.Serialization;
+
+using Ecomm.Orders.Domain.Primitives;
 
 namespace Ecomm.Orders.Domain.Entities;
 
@@ -12,6 +14,14 @@ public class Customer : Entity
 
     public Customer(string name, string email)
     {
+        Name = name;
+        Email = email;
+    }
+
+    [JsonConstructor]
+    internal Customer(Guid id, string name, string email)
+    {
+        Id = id;
         Name = name;
         Email = email;
     }
