@@ -35,7 +35,7 @@ public sealed class Order : Entity
         order.Raise(new OrderCreatedDomainEvent(
             order.Id,
             createOrderDto.Customer.Name,
-            createOrderDto.Customer.Email,
+            createOrderDto.Customer.Document,
             createOrderDto.CardHash, order.Total));
 
         return order;
