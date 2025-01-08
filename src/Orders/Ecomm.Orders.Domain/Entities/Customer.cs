@@ -7,22 +7,22 @@ namespace Ecomm.Orders.Domain.Entities;
 public class Customer : Entity
 {
     public string Name { get; private init; }
-    public string Email { get; private init; }
+    public string Document { get; private init; }
 
     // EF. Rel
     public IList<Order> Orders { get; private set; } = [];
 
-    public Customer(string name, string email)
+    public Customer(string name, string document)
     {
         Name = name;
-        Email = email;
+        Document = document;
     }
 
     [JsonConstructor]
-    internal Customer(Guid id, string name, string email)
+    internal Customer(Guid id, string name, string document)
     {
         Id = id;
         Name = name;
-        Email = email;
+        Document = document;
     }
 }
