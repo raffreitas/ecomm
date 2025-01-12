@@ -2,6 +2,8 @@
 using Ecomm.Payments.Domain.Services;
 using Ecomm.Payments.Infrastructure.MessageBus.Consumers;
 using Ecomm.Payments.Infrastructure.Payments;
+using Ecomm.Payments.Infrastructure.Payments.Services;
+using Ecomm.Payments.Infrastructure.Payments.Settings;
 using Ecomm.Payments.Infrastructure.Persistence;
 using Ecomm.Payments.Infrastructure.Persistence.Repositories;
 
@@ -46,7 +48,14 @@ public static class InfrastructureModule
 
     private static IServiceCollection AddPayment(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IPaymentService, PaymentService>();
+        services.Configure<PaymentSettings>(o =>
+            {
+                o.ApiKey = configuration["Payments:ApiKey"] ?? string.Empty;
+                o.BaseUrl = configuration["Payments:BaseUrl"] ?? string.Empty;
+            })
+            .AddOptionsWithValidateOnStart<PaymentSettings>();
+        services.AddScoped<IPaymentService, AsassPaymentService>();
+
         return services;
     }
 }

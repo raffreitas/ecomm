@@ -15,6 +15,8 @@ public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
 
         builder.Property(x => x.OrderId).IsRequired();
         builder.Property(x => x.Total).IsRequired();
+        builder.Property(x => x.CustomerName).IsRequired();
+        builder.Property(x => x.CustomerDocument).IsRequired();
         builder.Property(x => x.Status).IsRequired()
             .HasConversion(v => v.ToString(), v => Enum.Parse<PaymentStatus>(v));
 
