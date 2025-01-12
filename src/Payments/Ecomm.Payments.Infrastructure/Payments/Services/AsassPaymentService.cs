@@ -58,10 +58,8 @@ public class AsassPaymentService : IPaymentService
         AsassCreatePaymentRequestDto dto,
         CancellationToken cancellationToken)
     {
-        // TODO: Send the card hash on request and solve the error on the document of a provider/client
-
         var response = await _httpClient.PostAsJsonAsync("api/v3/payments", dto, cancellationToken);
-        // response.EnsureSuccessStatusCode();
+        response.EnsureSuccessStatusCode();
 
         var stream = await response.Content.ReadAsStringAsync(cancellationToken);
         var createPaymentResponse = JsonSerializer.Deserialize<AsassCreatePaymentResponseDto>(stream);
