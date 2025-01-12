@@ -5,13 +5,14 @@ Este é um projeto de demonstração de um sistema de ecommerce baseado em micro
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **.NET 9**  
-- **ASP.NET Core**  
+- **.NET 9**
+- **ASP.NET Core**
 - **Entity Framework Core**  
-- **RabbitMQ**  
-- **PostgreSQL**  
+- **RabbitMQ**
+- **PostgreSQL**
 - **Docker** e **Docker Compose**  
-- **Scalar** para documentação de APIs  
+- **Scalar** para documentação de APIs
+- **Asaas** para processamento de pagamentos
 
 ---
 
@@ -47,19 +48,20 @@ O sistema é composto pelos seguintes microserviços:
 1. **Catalog**  
    - Gerenciamento de produtos e categorias (CRUD).
    - Exposição de APIs REST.
+   - Publica mensagens no RabbitMQ quando um produto é criado.
 
 2. **Orders**  
-   - Criação e gerenciamento de pedidos.  
-   - Publica mensagens no RabbitMQ para processar pedidos.
-   - Consome mensagens do RabbitMQ para atualizar a entidade de produto local.
+   - Criação e gerenciamento de pedidos.
+   - Publica mensagens no RabbitMQ para processar o pagamento de um pedido.
+   - Consome mensagens do RabbitMQ para atualizar sua base de dados local tanto de clientes quanto de produtos.
 
 3. **Payments**  
-   - Processamento de pagamentos.  
+   - Processamento de pagamentos.
    - Consome mensagens do RabbitMQ e responde ao serviço de pedidos.
 
 4. **Customers**  
    - Gerenciamento de informações de clientes.
-   - Publica mensgens no RabbitMQ para informar que um novo cliente foi cadastrado.
+   - Publica mensgens no RabbitMQ quando um cliente é criado.
 
 ---
 
@@ -67,7 +69,6 @@ O sistema é composto pelos seguintes microserviços:
 
 ### Pré-requisitos
 
-- **.NET 9**.
 - **Docker** e **Docker Compose** instalados.
 
 ### Passos para executar
@@ -84,13 +85,13 @@ O sistema é composto pelos seguintes microserviços:
    ```bash
    docker-compose up -d
    ```
-<!--  
+ 
 4. Acesse a documentação das APIs através do Scalar:  
    - Catalog: [http://localhost:8080/scalar/v1](http://localhost:8080/scalar/v1)  
-   - Order: [http://localhost:8081/scalar/v1](http://localhost:8081/scalar/v1)  
-   - Payments: [http://localhost:8082/scalar/v1](http://localhost:8082/scalar/v1)  
-   - Customers: [http://localhost:8083/scalar/v1](http://localhost:8083/scalar/v1)  
--->
+   - Customers: [http://localhost:8081/scalar/v1](http://localhost:8081/scalar/v1)  
+   - Order: [http://localhost:8082/scalar/v1](http://localhost:8082/scalar/v1)  
+   - Payments: [http://localhost:8083/scalar/v1](http://localhost:8083/scalar/v1)  
+
 
 ---
 
