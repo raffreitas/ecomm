@@ -14,16 +14,10 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-
-    app.ApplyMigrations();
-}
+app.MapOpenApi();
+app.MapScalarApiReference();
+app.ApplyMigrations();
 
 app.MapCustomerEndpoints();
-
-app.UseHttpsRedirection();
 
 app.Run();
