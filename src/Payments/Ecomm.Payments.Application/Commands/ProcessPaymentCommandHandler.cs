@@ -21,7 +21,7 @@ public class ProcessPaymentCommandHandler : IRequestHandler<ProcessPaymentComman
     public async Task Handle(ProcessPaymentCommand request, CancellationToken cancellationToken)
     {
         Console.WriteLine("ProcessPaymentCommandHandler");
-        var payment = new Payment(request.Id, request.Total);
+        var payment = new Payment(request.Id, request.Total, request.CustomerDocument, request.CustomerName);
 
         var result = await _paymentService.ProcessPaymentAsync(payment, cancellationToken);
 

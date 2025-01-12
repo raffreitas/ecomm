@@ -59,7 +59,7 @@ public class OrderCreatedConsumer : BackgroundService
 
                 await channel.BasicAckAsync(eventArgs.DeliveryTag, multiple: false, cancellationToken: stoppingToken);
             }
-            catch (Exception ex)
+            catch
             {
                 await channel.BasicNackAsync(
                     eventArgs.DeliveryTag,

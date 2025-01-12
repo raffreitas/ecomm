@@ -7,12 +7,16 @@ public class Payment : Entity
 {
     public Guid OrderId { get; private set; }
     public decimal Total { get; private set; }
+    public string CustomerDocument { get; private set; }
+    public string CustomerName { get; private set; }
     public PaymentStatus Status { get; private set; }
 
-    public Payment(Guid orderId, decimal total)
+    public Payment(Guid orderId, decimal total, string customerDocument, string customerName)
     {
         OrderId = orderId;
         Total = total;
+        CustomerDocument = customerDocument;
+        CustomerName = customerName;
         Status = PaymentStatus.Pending;
     }
 
