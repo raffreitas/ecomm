@@ -51,7 +51,6 @@ public class CustomerCreatedConsumer : BackgroundService
                 var customerBytesArray = eventArgs.Body.ToArray();
                 var createCustomerJson = Encoding.UTF8.GetString(customerBytesArray);
 
-                Console.WriteLine($"Received: {createCustomerJson}");
                 var customer = JsonSerializer.Deserialize<Customer>(createCustomerJson);
 
                 if (customer is not null)

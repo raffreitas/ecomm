@@ -51,7 +51,6 @@ public class OrderCreatedConsumer : BackgroundService
             {
                 var orderBytesArray = eventArgs.Body.ToArray();
                 var processPaymentDtoJson = Encoding.UTF8.GetString(orderBytesArray);
-                Console.WriteLine($"Received: {processPaymentDtoJson}");
                 var processPaymentDto = JsonSerializer.Deserialize<ProcessPaymentCommand>(processPaymentDtoJson);
 
                 if (processPaymentDto is not null)

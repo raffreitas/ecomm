@@ -51,7 +51,6 @@ public class ProductCreatedConsumer : BackgroundService
                 var productBytesArray = eventArgs.Body.ToArray();
                 var createProductJson = Encoding.UTF8.GetString(productBytesArray);
 
-                Console.WriteLine($"Received: {createProductJson}");
                 var product = JsonSerializer.Deserialize<Product>(createProductJson);
 
                 if (product is not null)
