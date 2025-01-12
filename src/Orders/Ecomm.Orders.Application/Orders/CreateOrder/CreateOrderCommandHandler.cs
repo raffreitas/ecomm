@@ -1,4 +1,5 @@
-﻿using Ecomm.Orders.Domain.DTOs;
+﻿using Ecomm.Orders.Application.Abstractions;
+using Ecomm.Orders.Domain.DTOs;
 using Ecomm.Orders.Domain.Entities;
 using Ecomm.Orders.Domain.Repositories;
 
@@ -14,17 +15,20 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand>
     private readonly IProductRepository _productRepository;
     private readonly ICustomerRepository _customerRepository;
     private readonly IValidator<CreateOrderCommand> _validator;
+    private readonly ICurrentUser _currentUser;
 
     public CreateOrderCommandHandler(
         IOrderRepository orderRepository,
         ICustomerRepository customerRepository,
         IProductRepository productRepository,
-        IValidator<CreateOrderCommand> validator)
+        IValidator<CreateOrderCommand> validator,
+        ICurrentUser currentUser)
     {
         _orderRepository = orderRepository;
         _customerRepository = customerRepository;
         _productRepository = productRepository;
         _validator = validator;
+        _currentUser = currentUser;
     }
 
     public async Task Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -34,11 +38,10 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand>
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
 
-        // TODO: Inject service to get the customerId based on the user on request
-        var customerId = Guid.Parse("977dc239-f940-47ae-9170-eeb32b3f33d6");
+        var customerId = _currentUser.UserId;
         var customer = await _customerRepository.GetByIdAsync(customerId, cancellationToken);
         if (customer is null)
-            throw new Exception($"Customer {customerId} not found");
+            throw new Exception($"Customer not found");
 
 
         var uniqueProductIds = request.Items.Select(x => x.ProductId).ToHashSet();

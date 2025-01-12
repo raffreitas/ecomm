@@ -12,19 +12,19 @@ builder.Services
 
 builder.Services.AddControllers();
 
-builder.Services.AddOpenApi();
+builder.Services.AddApiReference();
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.MapApiReference();
     app.ApplyMigrations();
 }
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

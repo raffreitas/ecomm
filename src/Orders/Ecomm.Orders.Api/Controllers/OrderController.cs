@@ -2,11 +2,13 @@
 
 using MediatR;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecomm.Orders.Api.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/orders")]
 public class OrderController : ControllerBase
 {
