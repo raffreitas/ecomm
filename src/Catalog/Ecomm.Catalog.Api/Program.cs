@@ -17,16 +17,11 @@ builder.Services.AddExceptionHandler<ApiExceptionHandler>();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-    
-    app.ApplyMigrations();
-}
+app.MapOpenApi();
+app.MapScalarApiReference();
+
+app.ApplyMigrations();
 
 app.MapEndpoints();
-
-app.UseHttpsRedirection();
 
 app.Run();

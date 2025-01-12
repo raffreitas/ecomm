@@ -16,13 +16,8 @@ builder.Services.AddApiReference();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapApiReference();
-    app.ApplyMigrations();
-}
-
-app.UseHttpsRedirection();
+app.MapApiReference();
+app.ApplyMigrations();
 
 app.UseAuthentication();
 app.UseAuthorization();
