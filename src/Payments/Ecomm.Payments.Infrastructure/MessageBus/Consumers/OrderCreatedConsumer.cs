@@ -64,7 +64,7 @@ public class OrderCreatedConsumer : BackgroundService
                 await channel.BasicNackAsync(
                     eventArgs.DeliveryTag,
                     multiple: false,
-                    requeue: true,
+                    requeue: false,
                     cancellationToken: stoppingToken);
             }
         };
