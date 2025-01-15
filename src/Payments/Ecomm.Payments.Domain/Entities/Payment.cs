@@ -26,7 +26,7 @@ public class Payment : Entity
         if (Status != PaymentStatus.Pending)
             throw new InvalidOperationException($"Cannot mark as paid because status is {Status}.");
         Status = PaymentStatus.Approved;
-        Raise(new PaymentApprovedEvent(OrderId));
+        AddDomainEvent(new PaymentApprovedEvent(OrderId));
     }
 
     public void MarkAsRejected()
@@ -34,6 +34,6 @@ public class Payment : Entity
         if (Status != PaymentStatus.Pending)
             throw new InvalidOperationException($"Cannot mark as paid because status is {Status}.");
         Status = PaymentStatus.Rejected;
-        Raise(new PaymentRejectedEvent(OrderId));
+        AddDomainEvent(new PaymentRejectedEvent(OrderId));
     }
 }
