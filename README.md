@@ -63,6 +63,12 @@ O sistema é composto pelos seguintes microserviços:
    - Gerenciamento de informações de clientes.
    - Publica mensgens no RabbitMQ quando um cliente é criado.
 
+### ️ Diagrama da Arquitetura
+
+Este diagrama ilustra a arquitetura geral do sistema, mostrando a interação entre os microserviços e o fluxo de mensagens.
+
+![Diagrama da Arquitetura](./.github/images/diagram.png)
+
 ---
 
 ## 🔧 Configuração e Execução
@@ -83,7 +89,7 @@ O sistema é composto pelos seguintes microserviços:
 
 3. Suba os containers com o Docker Compose:  
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
  
 4. Acesse a documentação das APIs através do Scalar:  
