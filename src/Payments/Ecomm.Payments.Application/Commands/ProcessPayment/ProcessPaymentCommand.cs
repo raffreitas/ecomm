@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Ecomm.Payments.Application.Commands;
+namespace Ecomm.Payments.Application.Commands.ProcessPayment;
 
 public record ProcessPaymentCommand(
     Guid Id,

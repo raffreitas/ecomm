@@ -1,4 +1,5 @@
 ﻿using Ecomm.Payments.Domain.Enums;
+using Ecomm.Payments.Domain.Events;
 using Ecomm.Payments.Domain.Primitives;
 
 namespace Ecomm.Payments.Domain.Entities;
@@ -25,13 +26,14 @@ public class Payment : Entity
         if (Status != PaymentStatus.Pending)
             throw new InvalidOperationException($"Cannot mark as paid because status is {Status}.");
         Status = PaymentStatus.Approved;
+        Raise(new PaymentApprovedEvent(OrderId));
     }
 
     public void MarkAsRejected()
     {
         if (Status != PaymentStatus.Pending)
             throw new InvalidOperationException($"Cannot mark as paid because status is {Status}.");
-
         Status = PaymentStatus.Rejected;
+        Raise(new PaymentRejectedEvent(OrderId));
     }
 }

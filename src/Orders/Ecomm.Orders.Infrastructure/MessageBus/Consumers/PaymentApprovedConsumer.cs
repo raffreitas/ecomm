@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
 
-using Ecomm.Payments.Application.Commands.ProcessPayment;
+using Ecomm.Orders.Application.Orders.MarkOrderAsPaid;
 
 using MediatR;
 
@@ -12,15 +12,14 @@ using Microsoft.Extensions.Hosting;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace Ecomm.Payments.Infrastructure.MessageBus.Consumers;
-
-public class OrderCreatedConsumer : BackgroundService
+namespace Ecomm.Orders.Infrastructure.MessageBus.Consumers;
+internal class PaymentApprovedConsumer : BackgroundService
 {
-    private const string OrderCreatedQueueName = "order.created";
+    private const string CustomerCreatedQueueName = "payment.approved";
     private readonly IServiceProvider _serviceProvider;
     private readonly IConnectionFactory _factory;
 
-    public OrderCreatedConsumer(IServiceProvider serviceProvider, IConfiguration configuration)
+    public PaymentApprovedConsumer(IServiceProvider serviceProvider, IConfiguration configuration)
     {
         var host = configuration.GetSection("MessageBus:RabbitMQ:HostName").Value ?? string.Empty;
         var userName = configuration.GetSection("MessageBus:RabbitMQ:UserName").Value ?? string.Empty;
@@ -36,7 +35,7 @@ public class OrderCreatedConsumer : BackgroundService
         var channel = await connection.CreateChannelAsync(cancellationToken: stoppingToken);
 
         await channel.QueueDeclareAsync(
-            queue: OrderCreatedQueueName,
+            queue: CustomerCreatedQueueName,
             durable: true,
             exclusive: false,
             autoDelete: false,
@@ -49,12 +48,13 @@ public class OrderCreatedConsumer : BackgroundService
         {
             try
             {
-                var orderBytesArray = eventArgs.Body.ToArray();
-                var processPaymentDtoJson = Encoding.UTF8.GetString(orderBytesArray);
-                var processPaymentDto = JsonSerializer.Deserialize<ProcessPaymentCommand>(processPaymentDtoJson);
+                var customerBytesArray = eventArgs.Body.ToArray();
+                var createCustomerJson = Encoding.UTF8.GetString(customerBytesArray);
 
-                if (processPaymentDto is not null)
-                    await ProcessPaymentAsync(processPaymentDto, cancellationToken: stoppingToken);
+                var command = JsonSerializer.Deserialize<MarkOrderAsPaidCommand>(createCustomerJson);
+
+                if (command is not null)
+                    await SendCommand(command, stoppingToken);
 
                 await channel.BasicAckAsync(eventArgs.DeliveryTag, multiple: false, cancellationToken: stoppingToken);
             }
@@ -63,13 +63,13 @@ public class OrderCreatedConsumer : BackgroundService
                 await channel.BasicNackAsync(
                     eventArgs.DeliveryTag,
                     multiple: false,
-                    requeue: false,
+                    requeue: true,
                     cancellationToken: stoppingToken);
             }
         };
 
         await channel.BasicConsumeAsync(
-            queue: OrderCreatedQueueName,
+            queue: CustomerCreatedQueueName,
             autoAck: false,
             consumer: consumer,
             cancellationToken: stoppingToken);
@@ -78,11 +78,10 @@ public class OrderCreatedConsumer : BackgroundService
             await Task.Delay(1000, stoppingToken);
     }
 
-    private async Task ProcessPaymentAsync(ProcessPaymentCommand processPaymentCommand,
-        CancellationToken cancellationToken)
+    private async Task SendCommand(MarkOrderAsPaidCommand command, CancellationToken cancellationToken)
     {
         using var scope = _serviceProvider.CreateScope();
         var sender = scope.ServiceProvider.GetService<ISender>();
-        await sender?.Send(processPaymentCommand, cancellationToken)!;
+        await sender!.Send(command, cancellationToken);
     }
 }

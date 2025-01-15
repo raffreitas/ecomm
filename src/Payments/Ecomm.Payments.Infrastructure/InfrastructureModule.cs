@@ -1,7 +1,8 @@
-﻿using Ecomm.Payments.Domain.Repositories;
+﻿using Ecomm.Payments.Application.Abstractions;
+using Ecomm.Payments.Domain.Repositories;
 using Ecomm.Payments.Domain.Services;
+using Ecomm.Payments.Infrastructure.MessageBus;
 using Ecomm.Payments.Infrastructure.MessageBus.Consumers;
-using Ecomm.Payments.Infrastructure.Payments;
 using Ecomm.Payments.Infrastructure.Payments.Services;
 using Ecomm.Payments.Infrastructure.Payments.Settings;
 using Ecomm.Payments.Infrastructure.Persistence;
@@ -42,6 +43,7 @@ public static class InfrastructureModule
 
     private static IServiceCollection AddRabbitMq(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<IMessageBusService, RabbitMqMessageBusService>();
         services.AddHostedService<OrderCreatedConsumer>();
         return services;
     }
