@@ -32,7 +32,7 @@ public sealed class Order : Entity
             order.AddItem(new OrderItem(item.Quantity, item.UnitPrice, item.ProductId, order.Id));
         }
 
-        order.Raise(new OrderCreatedDomainEvent(
+        order.AddDomainEvent(new OrderCreatedDomainEvent(
             order.Id,
             createOrderDto.Customer.Name,
             createOrderDto.Customer.Document,
