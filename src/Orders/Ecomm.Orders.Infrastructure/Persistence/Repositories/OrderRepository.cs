@@ -1,5 +1,8 @@
-﻿using Ecomm.Orders.Domain.Entities;
+﻿
+using Ecomm.Orders.Domain.Entities;
 using Ecomm.Orders.Domain.Repositories;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Ecomm.Orders.Infrastructure.Persistence.Repositories;
 
@@ -19,4 +22,7 @@ public class OrderRepository : IOrderRepository
 
         return savedOrder.Entity;
     }
+
+    public async Task<Order?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        => await _dbContext.Orders.FirstOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
 }

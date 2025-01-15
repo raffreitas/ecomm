@@ -46,6 +46,8 @@ public static class InfrastructureModule
     {
         services.AddHostedService<CustomerCreatedConsumer>();
         services.AddHostedService<ProductCreatedConsumer>();
+        services.AddHostedService<PaymentApprovedConsumer>();
+        services.AddHostedService<PaymentRejectedConsumer>();
 
         return services;
     }

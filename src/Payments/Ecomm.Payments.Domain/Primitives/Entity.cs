@@ -2,8 +2,13 @@
 
 public abstract class Entity
 {
-    public Guid Id { get; private init; } = Guid.NewGuid();
-    public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
+    private readonly List<IDomainEvent> _domainEvents = [];
+    public Guid Id { get; protected init; } = Guid.NewGuid();
+    public DateTime CreatedAt { get; protected set; } = DateTime.UtcNow;
+    public ICollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
     protected Entity() { }
+
+    protected void Raise(IDomainEvent domainEvent) => _domainEvents.Add(domainEvent);
+    public void ClearDomainEvents() => _domainEvents.Clear();
 }

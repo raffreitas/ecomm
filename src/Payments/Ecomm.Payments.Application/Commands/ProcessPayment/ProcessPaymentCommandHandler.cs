@@ -5,7 +5,7 @@ using Ecomm.Payments.Domain.Services;
 
 using MediatR;
 
-namespace Ecomm.Payments.Application.Commands;
+namespace Ecomm.Payments.Application.Commands.ProcessPayment;
 
 public class ProcessPaymentCommandHandler : IRequestHandler<ProcessPaymentCommand>
 {

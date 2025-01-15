@@ -2,8 +2,6 @@ using Ecomm.Orders.Api.Extensions;
 using Ecomm.Orders.Application;
 using Ecomm.Orders.Infrastructure;
 
-using Scalar.AspNetCore;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
