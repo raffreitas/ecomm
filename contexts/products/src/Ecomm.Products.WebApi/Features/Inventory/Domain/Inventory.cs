@@ -30,4 +30,39 @@ public sealed class Inventory : AggregateRoot
     {
         return new Inventory(productId, quantity);
     }
+
+    public void AddStock(Quantity quantityToAdd)
+    {
+        if (quantityToAdd is null)
+            throw new ArgumentNullException(nameof(quantityToAdd), "Quantity to add cannot be null.");
+        
+        if (quantityToAdd.Value <= 0)
+            throw new ArgumentException("Quantity to add must be positive.", nameof(quantityToAdd));
+
+        var newQuantity = Quantity.Create(Quantity.Value + quantityToAdd.Value);
+        Quantity = newQuantity;
+    }
+
+    public void RemoveStock(Quantity quantityToRemove)
+    {
+        if (quantityToRemove is null)
+            throw new ArgumentNullException(nameof(quantityToRemove), "Quantity to remove cannot be null.");
+        
+        if (quantityToRemove.Value <= 0)
+            throw new ArgumentException("Quantity to remove must be positive.", nameof(quantityToRemove));
+
+        if (Quantity.Value < quantityToRemove.Value)
+            throw new InvalidOperationException("Cannot remove more stock than available.");
+
+        var newQuantity = Quantity.Create(Quantity.Value - quantityToRemove.Value);
+        Quantity = newQuantity;
+    }
+
+    public bool HasSufficientStock(Quantity requiredQuantity)
+    {
+        if (requiredQuantity is null)
+            throw new ArgumentNullException(nameof(requiredQuantity), "Required quantity cannot be null.");
+        
+        return Quantity.Value >= requiredQuantity.Value;
+    }
 }
