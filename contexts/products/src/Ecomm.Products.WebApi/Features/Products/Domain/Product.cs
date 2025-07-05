@@ -49,4 +49,25 @@ public sealed class Product : AggregateRoot
     {
         _images.Add(image);
     }
+
+    public void Update(string name, string description, Price price, Category[] categories)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Product name cannot be null or empty.", nameof(name));
+        if (string.IsNullOrWhiteSpace(description))
+            throw new ArgumentException("Product description cannot be null or empty.", nameof(description));
+        if (price is null)
+            throw new ArgumentNullException(nameof(price), "Price cannot be null.");
+
+        Name = name;
+        Description = description;
+        Price = price;
+        _categories.Clear();
+        _categories.AddRange(categories);
+    }
+
+    public void ToggleListing()
+    {
+        IsListed = !IsListed;
+    }
 }

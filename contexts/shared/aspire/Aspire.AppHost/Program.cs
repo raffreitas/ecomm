@@ -1,6 +1,7 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
 var postgresql = builder.AddPostgres("postgressql")
+    .WithHostPort(5432)
     .WithDataVolume();
 
 var productsDb = postgresql

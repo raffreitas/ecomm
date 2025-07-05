@@ -1,20 +1,28 @@
-﻿using FluentValidation;
+using FluentValidation;
+using FluentValidation.Results;
 
-namespace Ecomm.Products.WebApi.Features.Products.Commands.AddProduct;
+namespace Ecomm.Products.WebApi.Features.Products.Commands.UpdateProduct;
 
-public sealed record AddProductCommand
+public sealed record UpdateProductCommand
 {
-    public required string[] Categories { get; init; } = [];
+    public required Guid Id { get; init; }
     public required string Name { get; init; }
     public required string Description { get; init; }
     public required decimal Price { get; init; }
     public required string Currency { get; init; }
+    public required string[] Categories { get; init; } = [];
+
+    public ValidationResult Validate() => new UpdateProductCommandValidator().Validate(this);
 }
 
-public sealed class AddProductCommandValidator : AbstractValidator<AddProductCommand>
+public sealed class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
 {
-    public AddProductCommandValidator()
+    public UpdateProductCommandValidator()
     {
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .WithMessage("Product ID is required.");
+
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage("Product name is required.")
