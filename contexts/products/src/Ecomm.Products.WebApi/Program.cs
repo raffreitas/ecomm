@@ -1,23 +1,16 @@
-using Aspire.ServiceDefaults;
+using Ecomm.Products.WebApi;
 
-using Scalar.AspNetCore;
-
-var builder = WebApplication.CreateBuilder(args);
-
-builder.AddServiceDefaults();
-
-builder.Services.AddOpenApi();
-
-var app = builder.Build();
-
-app.MapDefaultEndpoints();
-
-if (app.Environment.IsDevelopment())
+try
 {
-    app.MapOpenApi();
-    app.MapScalarApiReference();
+    var builder = WebApplication.CreateBuilder(args);
+    Startup.ConfigureBuilder(builder);
+    var app = builder.Build();
+    Startup.ConfigureApp(app);
+    await app.RunAsync();
 }
-
-app.UseHttpsRedirection();
-
-await app.RunAsync();
+catch (Exception ex)
+{
+    using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
+    var logger = factory.CreateLogger<WebApplication>();
+    logger.LogCritical(ex, "An unhandled exception occurred during application startup.");
+}

@@ -1,13 +1,14 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var mongodb = builder
-    .AddMongoDB("mongodb")
-    .WithDataVolume()
-    .AddDatabase("products-db");
+var postgresql = builder.AddPostgres("postgressql", port: 5432)
+    .WithDataVolume();
+
+var productsDb = postgresql
+    .AddDatabase("products");
 
 builder
     .AddProject<Projects.Ecomm_Products_WebApi>("ecomm-products-webapi")
-    .WithReference(mongodb)
-    .WaitFor(mongodb);
+    .WithReference(productsDb, "DatabaseConnection")
+    .WaitFor(postgresql);
 
 await builder.Build().RunAsync();
