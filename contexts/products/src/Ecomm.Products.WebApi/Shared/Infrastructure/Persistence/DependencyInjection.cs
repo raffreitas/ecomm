@@ -1,5 +1,7 @@
-﻿using Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Context;
+﻿using Ecomm.Products.WebApi.Shared.Abstractions;
+using Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Context;
 using Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Extensions;
+using Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Shared;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +17,8 @@ public static class DependencyInjection
 
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure()).UseSnakeCaseNamingConvention());
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }
