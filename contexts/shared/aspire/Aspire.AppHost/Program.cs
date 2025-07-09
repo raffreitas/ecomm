@@ -10,6 +10,8 @@ var productsDb = postgresql
 builder
     .AddProject<Projects.Ecomm_Products_WebApi>("ecomm-products-webapi")
     .WithReference(productsDb, "DatabaseConnection")
+    .WithEnvironment("SemanticKernel__ApiKey", builder.AddParameter("semanticKernel-apiKey", secret: true))
+    .WithEnvironment("SemanticKernel__ModelName", builder.AddParameter("semanticKernel-modelName", secret: true))
     .WaitFor(postgresql);
 
 await builder.Build().RunAsync();

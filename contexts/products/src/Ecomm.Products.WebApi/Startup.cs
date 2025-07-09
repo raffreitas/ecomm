@@ -1,6 +1,7 @@
 ﻿using Aspire.ServiceDefaults;
 
 using Ecomm.Products.WebApi.Features;
+using Ecomm.Products.WebApi.Shared.Infrastructure.AI;
 using Ecomm.Products.WebApi.Shared.Infrastructure.Persistence;
 using Ecomm.Products.WebApi.Shared.Presentation;
 
@@ -18,6 +19,7 @@ public static class Startup
         services.AddPersistenceConfiguration(configuration);
         services.AddPresentationConfiguration();
         services.AddFeaturesConfiguration();
+        services.AddSemanticKernelConfiguration(configuration);
     }
 
     public static void ConfigureApp(WebApplication app)
