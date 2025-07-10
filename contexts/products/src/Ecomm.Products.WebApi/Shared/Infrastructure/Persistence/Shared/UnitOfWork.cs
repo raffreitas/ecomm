@@ -1,10 +1,32 @@
 ﻿using Ecomm.Products.WebApi.Shared.Abstractions;
+using Ecomm.Products.WebApi.Shared.Domain.Abstractions;
+using Ecomm.Products.WebApi.Shared.Domain.Events;
 using Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Context;
 
 namespace Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Shared;
 
-internal sealed class UnitOfWork(ApplicationDbContext dbContext) : IUnitOfWork
+internal sealed class UnitOfWork(ApplicationDbContext dbContext, IDomainEventDispatcher domainEventDispatcher) : IUnitOfWork
 {
-    public Task CommitAsync(CancellationToken cancellationToken = default)
-        => dbContext.SaveChangesAsync(cancellationToken);
+    public async Task CommitAsync(CancellationToken cancellationToken = default)
+    {
+        await DispatchDomainEventsIfNeeded(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task DispatchDomainEventsIfNeeded(CancellationToken cancellationToken = default)
+    {
+        var domainEvents = dbContext.ChangeTracker
+            .Entries<AggregateRoot>()
+            .Select(x => x.Entity)
+            .Where(x => x.DomainEvents.Any())
+            .SelectMany(x =>
+            {
+                IEnumerable<DomainEvent> domainEvents = [.. x.DomainEvents];
+                x.ClearDomainEvents();
+                return domainEvents;
+            }).ToList();
+
+        if (domainEvents.Count != 0)
+            await domainEventDispatcher.DispatchAsync(domainEvents, cancellationToken);
+    }
 }

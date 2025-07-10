@@ -1,4 +1,5 @@
 ﻿using Ecomm.Products.WebApi.Features.Products.Domain.Entities;
+using Ecomm.Products.WebApi.Features.Products.Domain.Events;
 using Ecomm.Products.WebApi.Features.Products.Domain.ValueObject;
 using Ecomm.Products.WebApi.Shared.Domain.Abstractions;
 using Ecomm.Products.WebApi.Shared.Domain.ValueObjects;
@@ -38,11 +39,16 @@ public sealed class Product : AggregateRoot
         Description = description;
         Price = price;
         _categories = [.. categories];
+        IsListed = false;
     }
 
     public static Product Create(string name, string description, Price price, Category[] categories)
     {
-        return new Product(name, description, price, categories);
+        var product = new Product(name, description, price, categories);
+
+        product.AddDomainEvent(new ProductCreatedDomainEvent(product.Id, name, description, price));
+
+        return product;
     }
 
     public void AddImage(Image image)
