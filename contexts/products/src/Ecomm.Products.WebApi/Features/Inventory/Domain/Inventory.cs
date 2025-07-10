@@ -35,7 +35,7 @@ public sealed class Inventory : AggregateRoot
     {
         if (quantityToAdd is null)
             throw new ArgumentNullException(nameof(quantityToAdd), "Quantity to add cannot be null.");
-        
+
         if (quantityToAdd.Value <= 0)
             throw new ArgumentException("Quantity to add must be positive.", nameof(quantityToAdd));
 
@@ -47,7 +47,7 @@ public sealed class Inventory : AggregateRoot
     {
         if (quantityToRemove is null)
             throw new ArgumentNullException(nameof(quantityToRemove), "Quantity to remove cannot be null.");
-        
+
         if (quantityToRemove.Value <= 0)
             throw new ArgumentException("Quantity to remove must be positive.", nameof(quantityToRemove));
 
@@ -60,9 +60,8 @@ public sealed class Inventory : AggregateRoot
 
     public bool HasSufficientStock(Quantity requiredQuantity)
     {
-        if (requiredQuantity is null)
-            throw new ArgumentNullException(nameof(requiredQuantity), "Required quantity cannot be null.");
-        
-        return Quantity.Value >= requiredQuantity.Value;
+        return requiredQuantity is null
+            ? throw new ArgumentNullException(nameof(requiredQuantity), "Required quantity cannot be null.")
+            : Quantity.Value >= requiredQuantity.Value;
     }
 }
