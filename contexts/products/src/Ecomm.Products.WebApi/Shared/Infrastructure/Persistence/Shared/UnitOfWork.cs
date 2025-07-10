@@ -15,7 +15,19 @@ internal sealed class UnitOfWork(ApplicationDbContext dbContext, IDomainEventDis
 
     private async Task DispatchDomainEventsIfNeeded(CancellationToken cancellationToken = default)
     {
-        var domainEvents = dbContext.ChangeTracker
+        List<DomainEvent> domainEvents;
+        do
+        {
+            domainEvents = GetAndClearDomainEventsFromAggregates();
+
+            if (domainEvents.Count != 0)
+                await domainEventDispatcher.DispatchAsync(domainEvents, cancellationToken);
+
+        } while (domainEvents.Count != 0);
+    }
+
+    private List<DomainEvent> GetAndClearDomainEventsFromAggregates()
+        => [.. dbContext.ChangeTracker
             .Entries<AggregateRoot>()
             .Select(x => x.Entity)
             .Where(x => x.DomainEvents.Any())
@@ -24,9 +36,5 @@ internal sealed class UnitOfWork(ApplicationDbContext dbContext, IDomainEventDis
                 IEnumerable<DomainEvent> domainEvents = [.. x.DomainEvents];
                 x.ClearDomainEvents();
                 return domainEvents;
-            }).ToList();
-
-        if (domainEvents.Count != 0)
-            await domainEventDispatcher.DispatchAsync(domainEvents, cancellationToken);
-    }
+            })];
 }
