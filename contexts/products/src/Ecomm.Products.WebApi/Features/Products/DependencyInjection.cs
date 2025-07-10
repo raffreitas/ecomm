@@ -1,4 +1,5 @@
 ﻿using Ecomm.Products.WebApi.Features.Products.Commands.AddProduct;
+using Ecomm.Products.WebApi.Features.Products.Commands.ToggleProductListing;
 using Ecomm.Products.WebApi.Features.Products.Commands.UpdateProduct;
 using Ecomm.Products.WebApi.Features.Products.Domain.Repositories;
 using Ecomm.Products.WebApi.Features.Products.Infrastructure.Repositories;
@@ -14,8 +15,10 @@ public static class DependencyInjection
     {
         services.AddScoped<IProductRepository, ProductRepository>();
 
+
         services.AddScoped<AddProductHandler>();
         services.AddScoped<UpdateProductHandler>();
+        services.AddScoped<ToggleProductListingHandler>();
 
         services.AddScoped<GetProductByIdHandler>();
         services.AddScoped<GetProductsPagedHandler>();
