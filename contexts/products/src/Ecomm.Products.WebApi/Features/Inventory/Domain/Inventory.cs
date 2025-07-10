@@ -7,7 +7,7 @@ public sealed class Inventory : AggregateRoot
 {
     public Guid ProductId { get; private set; }
     public Quantity Quantity { get; private set; }
-    public bool IsAvailable => Quantity.Value > 0;
+    public bool IsAvailable => Quantity > 0;
 
 
     #region EF Constructor
@@ -39,7 +39,7 @@ public sealed class Inventory : AggregateRoot
         if (quantityToAdd.Value <= 0)
             throw new ArgumentException("Quantity to add must be positive.", nameof(quantityToAdd));
 
-        var newQuantity = Quantity.Create(Quantity.Value + quantityToAdd.Value);
+        var newQuantity = Quantity.Create(Quantity + quantityToAdd);
         Quantity = newQuantity;
     }
 
@@ -54,7 +54,7 @@ public sealed class Inventory : AggregateRoot
         if (Quantity.Value < quantityToRemove.Value)
             throw new InvalidOperationException("Cannot remove more stock than available.");
 
-        var newQuantity = Quantity.Create(Quantity.Value - quantityToRemove.Value);
+        var newQuantity = Quantity.Create(Quantity - quantityToRemove);
         Quantity = newQuantity;
     }
 
@@ -62,6 +62,6 @@ public sealed class Inventory : AggregateRoot
     {
         return requiredQuantity is null
             ? throw new ArgumentNullException(nameof(requiredQuantity), "Required quantity cannot be null.")
-            : Quantity.Value >= requiredQuantity.Value;
+            : Quantity >= requiredQuantity;
     }
 }

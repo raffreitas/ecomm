@@ -13,4 +13,7 @@ public sealed record Quantity : IValueObject
     }
     public static Quantity Create(int value) => new(value);
     public override string ToString() => Value.ToString();
+
+    public static implicit operator int(Quantity quantity) => quantity.Value;
+    public static explicit operator Quantity(int value) => Create(value);
 }
