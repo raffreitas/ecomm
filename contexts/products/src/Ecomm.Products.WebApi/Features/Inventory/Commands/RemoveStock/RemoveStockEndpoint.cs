@@ -29,15 +29,9 @@ public class RemoveStockEndpoint : IEndpoint
             Quantity = request.Quantity
         };
 
-        var result = await handler.Handle(command, ct);
-        
-        return result switch
-        {
-            RemoveStockResult.Success => Results.NoContent(),
-            RemoveStockResult.NotFound => Results.NotFound(),
-            RemoveStockResult.InsufficientStock => Results.Conflict("Insufficient stock available."),
-            _ => Results.BadRequest()
-        };
+        await handler.Handle(command, ct);
+
+        return Results.NoContent();
     }
 }
 

@@ -28,11 +28,9 @@ public class AddStockEndpoint : IEndpoint
             Quantity = request.Quantity
         };
 
-        var updated = await handler.Handle(command, ct);
-        
-        return updated 
-            ? Results.NoContent() 
-            : Results.NotFound();
+        await handler.Handle(command, ct);
+
+        return Results.NoContent();
     }
 }
 

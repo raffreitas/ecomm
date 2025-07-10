@@ -9,7 +9,7 @@ internal sealed class AddStockHandler(
     IInventoryRepository inventoryRepository,
     IUnitOfWork unitOfWork)
 {
-    public async Task<bool> Handle(AddStockCommand command, CancellationToken ct)
+    public async Task Handle(AddStockCommand command, CancellationToken ct)
     {
         var inventory = await inventoryRepository.GetByProductIdAsync(command.ProductId, ct);
         if (inventory is null)
@@ -20,6 +20,5 @@ internal sealed class AddStockHandler(
 
         await inventoryRepository.UpdateAsync(inventory, ct);
         await unitOfWork.CommitAsync(ct);
-        return true;
     }
 }

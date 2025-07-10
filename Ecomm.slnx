@@ -2,6 +2,7 @@
   <Folder Name="/Services/" />
   <Folder Name="/Services/Products/">
     <Project Path="contexts/products/src/Ecomm.Products.WebApi/Ecomm.Products.WebApi.csproj" />
+    <Project Path="contexts/products/tests/Ecomm.Products.WebApi.UnitTests/Ecomm.Products.WebApi.UnitTests.csproj" Id="ccb3465c-e497-45ca-84c3-e5d9c147cda5" />
   </Folder>
   <Folder Name="/Shared/" />
   <Folder Name="/Shared/Aspire/">
