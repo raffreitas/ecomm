@@ -1,8 +1,8 @@
 ﻿using Aspire.ServiceDefaults;
 
 using Ecomm.Products.WebApi.Features;
-using Ecomm.Products.WebApi.Shared.Infrastructure.AI;
 using Ecomm.Products.WebApi.Shared.Infrastructure.Persistence;
+using Ecomm.Products.WebApi.Shared.Infrastructure.SemanticKernel;
 using Ecomm.Products.WebApi.Shared.Presentation;
 
 namespace Ecomm.Products.WebApi;

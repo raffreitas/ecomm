@@ -1,8 +1,8 @@
-﻿using Ecomm.Products.WebApi.Shared.Infrastructure.AI.Settings;
+﻿using Ecomm.Products.WebApi.Shared.Infrastructure.SemanticKernel.Settings;
 
 using Microsoft.SemanticKernel;
 
-namespace Ecomm.Products.WebApi.Shared.Infrastructure.AI;
+namespace Ecomm.Products.WebApi.Shared.Infrastructure.SemanticKernel;
 
 public static class DependencyInjection
 {

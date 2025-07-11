@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Ecomm.Products.WebApi.Shared.Infrastructure.AI.Settings;
+namespace Ecomm.Products.WebApi.Shared.Infrastructure.SemanticKernel.Settings;
 
 public sealed record SemanticKernelSettings
 {
