@@ -39,19 +39,15 @@ public sealed class Product : AggregateRoot
         Price = price;
         _categoryIds = categoryIds?.ToList() ?? [];
         IsListed = false;
+
+        AddDomainEvent(ProductCreatedDomainEvent.FromAggregate(this));
     }
 
     public static Product Create(string name, string description, Price price, IEnumerable<Guid> categoryIds)
-    {
-        var product = new Product(name, description, price, categoryIds);
-        product.AddDomainEvent(new ProductCreatedDomainEvent(product.Id, name, description, price));
-        return product;
-    }
+        => new(name, description, price, categoryIds);
 
     public void AddImage(Image image)
-    {
-        _images.Add(image);
-    }
+        => _images.Add(image);
 
     public void AddCategory(Guid categoryId)
         => _categoryIds.Add(categoryId);
@@ -74,7 +70,5 @@ public sealed class Product : AggregateRoot
     }
 
     public void ToggleListing()
-    {
-        IsListed = !IsListed;
-    }
+        => IsListed = !IsListed;
 }

@@ -1,15 +1,20 @@
 using Ecomm.Products.WebApi.Features.Inventory.Domain.Events;
+using Ecomm.Products.WebApi.Features.Inventory.Events.Integration;
+using Ecomm.Products.WebApi.Shared.Abstractions;
 using Ecomm.Products.WebApi.Shared.Domain.Abstractions;
 
 namespace Ecomm.Products.WebApi.Features.Inventory.Events.Handlers;
 
-public sealed class StockReplenishedDomainEventHandler(ILogger<StockReplenishedDomainEventHandler> logger)
-    : IDomainEventHandler<StockReplenishedDomainEvent>
+public sealed class StockReplenishedDomainEventHandler(
+    ILogger<StockReplenishedDomainEventHandler> logger,
+    IEventOutboxService eventOutboxService
+) : IDomainEventHandler<StockReplenishedDomainEvent>
 {
-    public Task HandleAsync(StockReplenishedDomainEvent domainEvent, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(StockReplenishedDomainEvent domainEvent, CancellationToken cancellationToken = default)
     {
-        logger.LogInformation("[Inventory] Estoque reabastecido: Produto {ProductId}, Quantidade Atual: {CurrentQuantity}", domainEvent.ProductId, domainEvent.CurrentQuantity);
-        // Possível ação: atualizar dashboards, notificar compras, etc.
-        return Task.CompletedTask;
+        logger.LogInformation("[Inventory] Stock replenished: Product {ProductId}, Current Quantity: {CurrentQuantity}", domainEvent.ProductId, domainEvent.CurrentQuantity);
+        var integrationEvent = new StockReplenishedIntegrationEvent(domainEvent.AggregateId, domainEvent.ProductId, domainEvent.CurrentQuantity);
+        await eventOutboxService.AddAsync(integrationEvent, cancellationToken);
+        logger.LogInformation("[Inventory] Integration event StockReplenishedIntegrationEvent published for Product {ProductId}.", domainEvent.ProductId);
     }
 }
