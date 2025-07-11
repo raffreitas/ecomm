@@ -2,7 +2,7 @@ using Ecomm.Products.WebApi.Shared.Presentation.Endpoints;
 
 namespace Ecomm.Products.WebApi.Features.Categories.Commands.DeleteCategory;
 
-public class DeleteCategoryEndpoint : IEndpoint
+public sealed class DeleteCategoryEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

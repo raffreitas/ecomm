@@ -3,7 +3,7 @@ using Ecomm.Products.WebApi.Shared.Presentation.Endpoints;
 
 namespace Ecomm.Products.WebApi.Features.Products.Queries.SearchProducts;
 
-public class SearchProductsEndpoint : IEndpoint
+public sealed class SearchProductsEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

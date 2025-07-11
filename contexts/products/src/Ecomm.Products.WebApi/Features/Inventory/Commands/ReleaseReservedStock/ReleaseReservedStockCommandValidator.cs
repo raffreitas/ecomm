@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace Ecomm.Products.WebApi.Features.Inventory.Commands.ReleaseReservedStock;
 
-public class ReleaseReservedStockCommandValidator : AbstractValidator<ReleaseReservedStockCommand>
+public sealed class ReleaseReservedStockCommandValidator : AbstractValidator<ReleaseReservedStockCommand>
 {
     public ReleaseReservedStockCommandValidator()
     {

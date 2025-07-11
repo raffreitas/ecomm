@@ -1,10 +1,9 @@
-using Ecomm.Products.WebApi.Shared.Presentation.Endpoints;
 using Ecomm.Products.WebApi.Shared.Domain.Pagination;
-using Microsoft.AspNetCore.Mvc;
+using Ecomm.Products.WebApi.Shared.Presentation.Endpoints;
 
 namespace Ecomm.Products.WebApi.Features.Products.Queries.GetProductsPaged;
 
-public class GetProductsPagedEndpoint : IEndpoint
+public sealed class GetProductsPagedEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

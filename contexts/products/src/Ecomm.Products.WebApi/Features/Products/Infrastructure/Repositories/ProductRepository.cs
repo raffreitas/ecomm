@@ -134,4 +134,10 @@ public sealed class ProductRepository(ApplicationDbContext dbContext) : IProduct
 
         return PagedResult<Product>.Create(items, totalCount, page, pageSize);
     }
+
+    public Task UpdateAsync(Product product, CancellationToken cancellationToken = default)
+    {
+        dbContext.Products.Update(product);
+        return Task.CompletedTask;
+    }
 }

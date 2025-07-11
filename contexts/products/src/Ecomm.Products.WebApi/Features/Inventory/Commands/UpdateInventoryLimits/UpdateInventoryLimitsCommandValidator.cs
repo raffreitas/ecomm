@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace Ecomm.Products.WebApi.Features.Inventory.Commands.UpdateInventoryLimits;
 
-public class UpdateInventoryLimitsCommandValidator : AbstractValidator<UpdateInventoryLimitsCommand>
+public sealed class UpdateInventoryLimitsCommandValidator : AbstractValidator<UpdateInventoryLimitsCommand>
 {
     public UpdateInventoryLimitsCommandValidator()
     {

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250710163654_v-01-3")]
-    partial class v013
+    [Migration("20250711115027_v001")]
+    partial class v001
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,36 @@ namespace Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Ecomm.Products.WebApi.Features.Categories.Domain.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.Property<Guid?>("ParentCategoryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("parent_category_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_categories");
+
+                    b.HasIndex("ParentCategoryId")
+                        .HasDatabaseName("ix_categories_parent_category_id");
+
+                    b.ToTable("categories", (string)null);
+                });
 
             modelBuilder.Entity("Ecomm.Products.WebApi.Features.Inventory.Domain.Inventory", b =>
                 {
@@ -76,7 +106,7 @@ namespace Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Migrations
                     b.Property<bool>("IsListed")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
-                        .HasDefaultValue(true)
+                        .HasDefaultValue(false)
                         .HasColumnName("is_listed");
 
                     b.Property<string>("Name")
@@ -89,6 +119,80 @@ namespace Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Migrations
                         .HasName("pk_products");
 
                     b.ToTable("products", (string)null);
+                });
+
+            modelBuilder.Entity("Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Models.OutboxEvent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("content");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("text")
+                        .HasColumnName("error");
+
+                    b.Property<DateTime>("OccurredAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("occurred_at");
+
+                    b.Property<DateTime?>("ProcessedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("processed_at");
+
+                    b.Property<int>("RetryCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("retry_count");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_outbox_event");
+
+                    b.ToTable("outbox_event", (string)null);
+                });
+
+            modelBuilder.Entity("Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Models.ProductCategory", b =>
+                {
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_id");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("category_id");
+
+                    b.HasKey("ProductId", "CategoryId")
+                        .HasName("pk_products_categories");
+
+                    b.HasIndex("CategoryId")
+                        .HasDatabaseName("ix_products_categories_category_id");
+
+                    b.ToTable("products_categories", (string)null);
+                });
+
+            modelBuilder.Entity("Ecomm.Products.WebApi.Features.Categories.Domain.Category", b =>
+                {
+                    b.HasOne("Ecomm.Products.WebApi.Features.Categories.Domain.Category", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_categories_categories_parent_category_id");
+
+                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("Ecomm.Products.WebApi.Features.Inventory.Domain.Inventory", b =>
@@ -209,37 +313,6 @@ namespace Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Migrations
                                 .HasConstraintName("fk_products_products_id");
                         });
 
-                    b.OwnsMany("Ecomm.Products.WebApi.Features.Products.Domain.Entities.Category", "Categories", b1 =>
-                        {
-                            b1.Property<Guid>("product_id")
-                                .HasColumnType("uuid")
-                                .HasColumnName("product_id");
-
-                            b1.Property<Guid>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("uuid")
-                                .HasColumnName("id");
-
-                            b1.Property<DateTimeOffset>("CreatedAt")
-                                .HasColumnType("timestamp with time zone")
-                                .HasColumnName("created_at");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasMaxLength(50)
-                                .HasColumnType("character varying(50)")
-                                .HasColumnName("name");
-
-                            b1.HasKey("product_id", "Id")
-                                .HasName("pk_product_categories");
-
-                            b1.ToTable("product_categories", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("product_id")
-                                .HasConstraintName("fk_product_categories_products_product_id");
-                        });
-
                     b.OwnsMany("Ecomm.Products.WebApi.Features.Products.Domain.ValueObject.Image", "Images", b1 =>
                         {
                             b1.Property<Guid>("product_id")
@@ -275,12 +348,32 @@ namespace Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Migrations
                                 .HasConstraintName("fk_product_images_products_product_id");
                         });
 
-                    b.Navigation("Categories");
-
                     b.Navigation("Images");
 
                     b.Navigation("Price")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Models.ProductCategory", b =>
+                {
+                    b.HasOne("Ecomm.Products.WebApi.Features.Categories.Domain.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_products_categories_categories_category_id");
+
+                    b.HasOne("Ecomm.Products.WebApi.Features.Products.Domain.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_products_categories_products_product_id");
+                });
+
+            modelBuilder.Entity("Ecomm.Products.WebApi.Features.Categories.Domain.Category", b =>
+                {
+                    b.Navigation("Children");
                 });
 #pragma warning restore 612, 618
         }

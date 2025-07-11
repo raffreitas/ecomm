@@ -29,4 +29,8 @@
     <ProjectReference Include="..\..\..\shared\aspire\Aspire.ServiceDefaults\Aspire.ServiceDefaults.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Shared\Infrastructure\Persistence\Migrations\" />
+  </ItemGroup>
+
 </Project>

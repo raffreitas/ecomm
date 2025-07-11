@@ -1,6 +1,6 @@
 namespace Ecomm.Products.WebApi.Features.Categories.Commands.UpdateCategory;
 
-public sealed class UpdateCategoryCommand
+public sealed record UpdateCategoryCommand
 {
     public required Guid Id { get; init; }
     public required string Name { get; init; }

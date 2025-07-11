@@ -19,6 +19,7 @@ public static class DependencyInjection
             options.UseNpgsql(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure()).UseSnakeCaseNamingConvention());
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IEventOutboxService, EventOutboxService>();
 
         return services;
     }

@@ -2,7 +2,7 @@ using Ecomm.Products.WebApi.Shared.Presentation.Endpoints;
 
 namespace Ecomm.Products.WebApi.Features.Inventory.Commands.CreateInventory;
 
-public class CreateInventoryEndpoint : IEndpoint
+public sealed class CreateInventoryEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

@@ -2,7 +2,7 @@ using Ecomm.Products.WebApi.Shared.Presentation.Endpoints;
 
 namespace Ecomm.Products.WebApi.Features.Inventory.Commands.UpdateInventoryLimits;
 
-public class UpdateInventoryLimitsEndpoint : IEndpoint
+public sealed class UpdateInventoryLimitsEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

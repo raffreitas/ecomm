@@ -2,7 +2,7 @@
 
 namespace Ecomm.Products.WebApi.Features.Products.Commands.AddProduct;
 
-public class AddProductEndpoint : IEndpoint
+public sealed class AddProductEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

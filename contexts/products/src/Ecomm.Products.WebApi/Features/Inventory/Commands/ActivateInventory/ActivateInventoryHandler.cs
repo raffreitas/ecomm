@@ -4,25 +4,16 @@ using Ecomm.Products.WebApi.Shared.Domain.Exceptions;
 
 namespace Ecomm.Products.WebApi.Features.Inventory.Commands.ActivateInventory;
 
-public sealed class ActivateInventoryHandler
+public sealed class ActivateInventoryHandler(IInventoryRepository inventoryRepository, IUnitOfWork unitOfWork)
 {
-    private readonly IInventoryRepository _inventoryRepository;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public ActivateInventoryHandler(IInventoryRepository inventoryRepository, IUnitOfWork unitOfWork)
-    {
-        _inventoryRepository = inventoryRepository;
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task Handle(ActivateInventoryCommand command, CancellationToken cancellationToken)
     {
-        var inventory = await _inventoryRepository.GetByProductIdAsync(command.ProductId, cancellationToken);
+        var inventory = await inventoryRepository.GetByProductIdAsync(command.ProductId, cancellationToken);
         if (inventory is null)
             throw new NotFoundException($"Inventory for product {command.ProductId} not found.");
 
         inventory.Activate();
-        await _inventoryRepository.UpdateAsync(inventory, cancellationToken);
-        await _unitOfWork.CommitAsync(cancellationToken);
+        await inventoryRepository.UpdateAsync(inventory, cancellationToken);
+        await unitOfWork.CommitAsync(cancellationToken);
     }
 }

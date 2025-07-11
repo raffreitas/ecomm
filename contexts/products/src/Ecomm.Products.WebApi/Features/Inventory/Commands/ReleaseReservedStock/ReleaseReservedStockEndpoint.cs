@@ -2,7 +2,7 @@ using Ecomm.Products.WebApi.Shared.Presentation.Endpoints;
 
 namespace Ecomm.Products.WebApi.Features.Inventory.Commands.ReleaseReservedStock;
 
-public class ReleaseReservedStockEndpoint : IEndpoint
+public sealed class ReleaseReservedStockEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

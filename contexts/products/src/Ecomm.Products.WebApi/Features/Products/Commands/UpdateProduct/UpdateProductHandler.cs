@@ -30,6 +30,7 @@ internal sealed class UpdateProductHandler(
             price,
             command.CategoryIds);
 
+        await productRepository.UpdateAsync(product, ct);
         await unitOfWork.CommitAsync(ct);
     }
 }

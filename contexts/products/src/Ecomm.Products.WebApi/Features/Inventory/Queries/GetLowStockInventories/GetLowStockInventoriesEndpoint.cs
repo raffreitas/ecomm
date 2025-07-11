@@ -1,10 +1,9 @@
-using Ecomm.Products.WebApi.Shared.Presentation.Endpoints;
 using Ecomm.Products.WebApi.Shared.Domain.Pagination;
-using Microsoft.AspNetCore.Mvc;
+using Ecomm.Products.WebApi.Shared.Presentation.Endpoints;
 
 namespace Ecomm.Products.WebApi.Features.Inventory.Queries.GetLowStockInventories;
 
-public class GetLowStockInventoriesEndpoint : IEndpoint
+public sealed class GetLowStockInventoriesEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

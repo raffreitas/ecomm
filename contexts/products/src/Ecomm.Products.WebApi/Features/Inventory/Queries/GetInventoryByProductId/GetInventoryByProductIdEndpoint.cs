@@ -2,7 +2,7 @@ using Ecomm.Products.WebApi.Shared.Presentation.Endpoints;
 
 namespace Ecomm.Products.WebApi.Features.Inventory.Queries.GetInventoryByProductId;
 
-public class GetInventoryByProductIdEndpoint : IEndpoint
+public sealed class GetInventoryByProductIdEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

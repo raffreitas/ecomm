@@ -1,6 +1,6 @@
 namespace Ecomm.Products.WebApi.Features.Categories.Commands.DeleteCategory;
 
-public sealed class DeleteCategoryCommand
+public sealed record DeleteCategoryCommand
 {
     public required Guid Id { get; init; }
 }

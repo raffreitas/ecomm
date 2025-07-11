@@ -1,6 +1,6 @@
 namespace Ecomm.Products.WebApi.Features.Inventory.Commands.ReleaseReservedStock;
 
-public sealed class ReleaseReservedStockCommand
+public sealed record ReleaseReservedStockCommand
 {
     public required Guid ProductId { get; init; }
     public required int Quantity { get; init; }

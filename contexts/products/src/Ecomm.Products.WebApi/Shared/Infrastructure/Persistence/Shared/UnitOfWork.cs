@@ -5,15 +5,18 @@ using Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Context;
 
 namespace Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Shared;
 
-internal sealed class UnitOfWork(ApplicationDbContext dbContext, IDomainEventDispatcher domainEventDispatcher) : IUnitOfWork
+internal sealed class UnitOfWork(
+    ApplicationDbContext dbContext,
+    IDomainEventDispatcher domainEventDispatcher
+) : IUnitOfWork
 {
     public async Task CommitAsync(CancellationToken cancellationToken = default)
     {
-        await DispatchDomainEventsIfNeeded(cancellationToken);
+        await DispatchEventsIfNeeded(cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task DispatchDomainEventsIfNeeded(CancellationToken cancellationToken = default)
+    private async Task DispatchEventsIfNeeded(CancellationToken cancellationToken = default)
     {
         List<DomainEvent> domainEvents;
         do

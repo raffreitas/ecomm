@@ -3,18 +3,11 @@ using Ecomm.Products.WebApi.Features.Categories.Domain.Repositories;
 
 namespace Ecomm.Products.WebApi.Features.Categories.Queries.GetCategories;
 
-public sealed class GetCategoriesHandler
+public sealed class GetCategoriesHandler(ICategoryRepository categoryRepository)
 {
-    private readonly ICategoryRepository _categoryRepository;
-
-    public GetCategoriesHandler(ICategoryRepository categoryRepository)
-    {
-        _categoryRepository = categoryRepository;
-    }
-
     public async Task<IReadOnlyList<CategoryDto>> Handle(GetCategoriesQuery query, CancellationToken cancellationToken)
     {
-        var categories = await _categoryRepository.GetByParentIdAsync(query.ParentCategoryId, cancellationToken);
+        var categories = await categoryRepository.GetByParentIdAsync(query.ParentCategoryId, cancellationToken);
         return [.. categories.Select(CategoryDto.FromEntity)];
     }
 }

@@ -1,6 +1,7 @@
+using Ecomm.Products.WebApi.Features.Inventory.Domain.Events;
 using Ecomm.Products.WebApi.Shared.Domain.Abstractions;
 
-namespace Ecomm.Products.WebApi.Features.Inventory.Domain.Events.Handlers;
+namespace Ecomm.Products.WebApi.Features.Inventory.Events.Handlers;
 
 public sealed class StockDepletedDomainEventHandler(ILogger<StockDepletedDomainEventHandler> logger)
     : IDomainEventHandler<StockDepletedDomainEvent>
