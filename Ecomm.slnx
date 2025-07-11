@@ -1,12 +1,15 @@
 <Solution>
   <Folder Name="/Services/" />
   <Folder Name="/Services/Products/">
-    <Project Path="contexts/products/src/Ecomm.Products.WebApi/Ecomm.Products.WebApi.csproj" />
-    <Project Path="contexts/products/tests/Ecomm.Products.WebApi.UnitTests/Ecomm.Products.WebApi.UnitTests.csproj" Id="ccb3465c-e497-45ca-84c3-e5d9c147cda5" />
+    <Project Path="D:/Workspace/ecomm/contexts/products/src/Ecomm.Products.WebApi/Ecomm.Products.WebApi.csproj" />
+    <Project Path="D:/Workspace/ecomm/contexts/products/tests/Ecomm.Products.WebApi.UnitTests/Ecomm.Products.WebApi.UnitTests.csproj" Id="ccb3465c-e497-45ca-84c3-e5d9c147cda5" />
   </Folder>
   <Folder Name="/Shared/" />
   <Folder Name="/Shared/Aspire/">
-    <Project Path="contexts/shared/aspire/Aspire.AppHost/Aspire.AppHost.csproj" />
-    <Project Path="contexts/shared/aspire/Aspire.ServiceDefaults/Aspire.ServiceDefaults.csproj" />
+    <Project Path="D:/Workspace/ecomm/contexts/shared/aspire/Aspire.AppHost/Aspire.AppHost.csproj" />
+    <Project Path="D:/Workspace/ecomm/contexts/shared/aspire/Aspire.ServiceDefaults/Aspire.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/Shared/Infrastructure/">
+    <Project Path="D:/Workspace/ecomm/contexts/shared/infrastructure/Ecomm.Shared.Infrastructure/Ecomm.Shared.Infrastructure.csproj" Id="ac607d64-31a9-43c8-9914-c0eacb2a93bd" />
   </Folder>
 </Solution>

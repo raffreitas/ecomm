@@ -1,15 +1,10 @@
+using Ecomm.Shared.Infrastructure.Observability;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-
-using Npgsql;
-
-using OpenTelemetry;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Trace;
 
 namespace Aspire.ServiceDefaults;
 
@@ -20,9 +15,9 @@ public static class Extensions
 {
     public static TBuilder AddServiceDefaults<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
     {
-        builder.ConfigureOpenTelemetry();
-
         builder.AddDefaultHealthChecks();
+
+        builder.Services.AddObservabilityConfiguration(builder.Configuration);
 
         builder.Services.AddServiceDiscovery();
 
@@ -44,55 +39,55 @@ public static class Extensions
         return builder;
     }
 
-    public static TBuilder ConfigureOpenTelemetry<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
-    {
-        builder.Logging.AddOpenTelemetry(logging =>
-        {
-            logging.IncludeFormattedMessage = true;
-            logging.IncludeScopes = true;
-        });
+    //public static TBuilder ConfigureOpenTelemetry<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
+    //{
+    //    builder.Logging.AddOpenTelemetry(logging =>
+    //    {
+    //        logging.IncludeFormattedMessage = true;
+    //        logging.IncludeScopes = true;
+    //    });
 
-        builder.Services.AddOpenTelemetry()
-            .WithMetrics(metrics =>
-            {
-                metrics.AddAspNetCoreInstrumentation()
-                    .AddHttpClientInstrumentation()
-                    .AddRuntimeInstrumentation()
-                    .AddNpgsqlInstrumentation();
-            })
-            .WithTracing(tracing =>
-            {
-                tracing.AddSource(builder.Environment.ApplicationName)
-                    .AddAspNetCoreInstrumentation()
-                    .AddEntityFrameworkCoreInstrumentation(x => x.SetDbStatementForText = true)
-                    // Uncomment the following line to enable gRPC instrumentation (requires the OpenTelemetry.Instrumentation.GrpcNetClient package)
-                    //.AddGrpcClientInstrumentation()
-                    .AddHttpClientInstrumentation();
-            });
+    //    builder.Services.AddOpenTelemetry()
+    //        .WithMetrics(metrics =>
+    //        {
+    //            metrics.AddAspNetCoreInstrumentation()
+    //                .AddHttpClientInstrumentation()
+    //                .AddRuntimeInstrumentation()
+    //                .AddNpgsqlInstrumentation();
+    //        })
+    //        .WithTracing(tracing =>
+    //        {
+    //            tracing.AddSource(builder.Environment.ApplicationName)
+    //                .AddAspNetCoreInstrumentation()
+    //                .AddEntityFrameworkCoreInstrumentation(x => x.SetDbStatementForText = true)
+    //                // Uncomment the following line to enable gRPC instrumentation (requires the OpenTelemetry.Instrumentation.GrpcNetClient package)
+    //                //.AddGrpcClientInstrumentation()
+    //                .AddHttpClientInstrumentation();
+    //        });
 
-        builder.AddOpenTelemetryExporters();
+    //    builder.AddOpenTelemetryExporters();
 
-        return builder;
-    }
+    //    return builder;
+    //}
 
-    private static TBuilder AddOpenTelemetryExporters<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
-    {
-        var useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
+    //private static TBuilder AddOpenTelemetryExporters<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
+    //{
+    //    var useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
 
-        if (useOtlpExporter)
-        {
-            builder.Services.AddOpenTelemetry().UseOtlpExporter();
-        }
+    //    if (useOtlpExporter)
+    //    {
+    //        builder.Services.AddOpenTelemetry().UseOtlpExporter();
+    //    }
 
-        // Uncomment the following lines to enable the Azure Monitor exporter (requires the Azure.Monitor.OpenTelemetry.AspNetCore package)
-        //if (!string.IsNullOrEmpty(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]))
-        //{
-        //    builder.Services.AddOpenTelemetry()
-        //       .UseAzureMonitor();
-        //}
+    //    // Uncomment the following lines to enable the Azure Monitor exporter (requires the Azure.Monitor.OpenTelemetry.AspNetCore package)
+    //    //if (!string.IsNullOrEmpty(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]))
+    //    //{
+    //    //    builder.Services.AddOpenTelemetry()
+    //    //       .UseAzureMonitor();
+    //    //}
 
-        return builder;
-    }
+    //    return builder;
+    //}
 
     public static TBuilder AddDefaultHealthChecks<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
     {
