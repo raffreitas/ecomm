@@ -52,15 +52,15 @@ public sealed class ProductRepository(ApplicationDbContext dbContext) : IProduct
             .Take(pageSize)
             .ToListAsync(cancellationToken);
 
-        // Carregar os CategoryIds para cada produto
+        // FIXME: Fix this query
         foreach (var product in items)
         {
             var categoryIds = await dbContext.ProductsCategories
                 .Where(pc => pc.ProductId == product.Id)
                 .Select(pc => pc.CategoryId)
                 .ToListAsync(cancellationToken);
-            var field = typeof(Product).GetField("_categoryIds", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            field?.SetValue(product, categoryIds);
+
+            categoryIds.ForEach(product.AddCategory);
         }
 
         return PagedResult<Product>.Create(items, totalCount, page, pageSize);
@@ -122,6 +122,7 @@ public sealed class ProductRepository(ApplicationDbContext dbContext) : IProduct
             .Take(pageSize)
             .ToListAsync(cancellationToken);
 
+        // FIXME: Fix this query
         foreach (var product in items)
         {
             var categoryIds = await dbContext.ProductsCategories

@@ -7,7 +7,7 @@ public sealed class StockBelowMinimumDomainEventHandler(ILogger<StockBelowMinimu
 {
     public Task HandleAsync(StockBelowMinimumDomainEvent domainEvent, CancellationToken cancellationToken = default)
     {
-        logger.LogWarning($"[Inventory] Estoque abaixo do mínimo: Produto {domainEvent.ProductId}, Quantidade Atual: {domainEvent.CurrentQuantity}, Mínimo: {domainEvent.MinimumStockLevel}");
+        logger.LogWarning("[Inventory] Estoque abaixo do mínimo: Produto {ProductId}, Quantidade Atual: {CurrentQuantity}, Mínimo: {MinimumStockLevel}", domainEvent.ProductId, domainEvent.CurrentQuantity, domainEvent.MinimumStockLevel);
         // Possível ação: disparar alerta, abrir chamado de compra, etc.
         return Task.CompletedTask;
     }

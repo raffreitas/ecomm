@@ -7,7 +7,7 @@ public sealed class StockCreatedDomainEventHandler(ILogger<StockCreatedDomainEve
 {
     public Task HandleAsync(StockCreatedDomainEvent domainEvent, CancellationToken cancellationToken = default)
     {
-        logger.LogInformation($"[Inventory] Novo estoque criado: Produto {domainEvent.ProductId}, Quantidade Inicial: {domainEvent.InitialQuantity}");
+        logger.LogInformation("[Inventory] Novo estoque criado: Produto {ProductId}, Quantidade Inicial: {InitialQuantity}", domainEvent.ProductId, domainEvent.InitialQuantity);
         // Possível ação: notificar sistema externo, enviar e-mail, etc.
         return Task.CompletedTask;
     }
