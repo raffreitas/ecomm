@@ -10,7 +10,7 @@ public sealed record UpdateProductCommand
     public required string Description { get; init; }
     public required decimal Price { get; init; }
     public required string Currency { get; init; }
-    public required string[] Categories { get; init; } = [];
+    public required Guid[] CategoryIds { get; init; } = [];
 
     public ValidationResult Validate() => new UpdateProductCommandValidator().Validate(this);
 }
@@ -45,7 +45,7 @@ public sealed class UpdateProductCommandValidator : AbstractValidator<UpdateProd
             .Length(3)
             .WithMessage("Currency must be exactly 3 characters.");
 
-        RuleFor(x => x.Categories)
+        RuleFor(x => x.CategoryIds)
             .NotEmpty()
             .WithMessage("At least one category is required.");
     }

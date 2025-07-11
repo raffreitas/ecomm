@@ -2,6 +2,7 @@
 using Ecomm.Products.WebApi.Features.Products.Domain.Repositories;
 using Ecomm.Products.WebApi.Shared.Domain.Pagination;
 using Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Context;
+using Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Models;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,13 +10,36 @@ namespace Ecomm.Products.WebApi.Features.Products.Infrastructure.Repositories;
 
 public sealed class ProductRepository(ApplicationDbContext dbContext) : IProductRepository
 {
+
     public async Task AddAsync(Product product, CancellationToken cancellationToken = default)
-        => await dbContext.Products.AddAsync(product, cancellationToken);
+    {
+        await dbContext.Products.AddAsync(product, cancellationToken);
+
+        var productCategories = product.CategoryIds.Select(categoryId => new ProductCategory(product.Id, categoryId));
+        if (productCategories.Any())
+            await dbContext.ProductsCategories.AddRangeAsync(productCategories, cancellationToken);
+    }
+
 
     public async Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
-        => await dbContext.Products
+    {
+        var product = await dbContext.Products
             .Where(p => p.Id == id)
             .FirstOrDefaultAsync(cancellationToken);
+
+        if (product is null)
+            return null;
+
+        var categoryIds = await dbContext.ProductsCategories
+            .Where(pc => pc.ProductId == id)
+            .Select(pc => pc.CategoryId)
+            .ToListAsync(cancellationToken);
+
+        categoryIds.ForEach(product.AddCategory);
+
+        return product;
+    }
+
 
     public async Task<PagedResult<Product>> GetPagedAsync(int page, int pageSize, CancellationToken cancellationToken = default)
     {
@@ -28,8 +52,20 @@ public sealed class ProductRepository(ApplicationDbContext dbContext) : IProduct
             .Take(pageSize)
             .ToListAsync(cancellationToken);
 
+        // Carregar os CategoryIds para cada produto
+        foreach (var product in items)
+        {
+            var categoryIds = await dbContext.ProductsCategories
+                .Where(pc => pc.ProductId == product.Id)
+                .Select(pc => pc.CategoryId)
+                .ToListAsync(cancellationToken);
+            var field = typeof(Product).GetField("_categoryIds", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            field?.SetValue(product, categoryIds);
+        }
+
         return PagedResult<Product>.Create(items, totalCount, page, pageSize);
     }
+
 
     public async Task<PagedResult<Product>> SearchAsync(
         string? searchTerm,
@@ -40,6 +76,10 @@ public sealed class ProductRepository(ApplicationDbContext dbContext) : IProduct
         int pageSize,
         CancellationToken cancellationToken = default)
     {
+        using var connection = dbContext.Database.GetDbConnection();
+        if (connection.State != System.Data.ConnectionState.Open)
+            await connection.OpenAsync(cancellationToken);
+
         var query = dbContext.Products.AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -51,12 +91,12 @@ public sealed class ProductRepository(ApplicationDbContext dbContext) : IProduct
 
         if (minPrice.HasValue)
         {
-            query = query.Where(p => p.Price.Amount >= minPrice.Value);
+            query = query.Where(p => p.Price.Amount >= minPrice);
         }
 
         if (maxPrice.HasValue)
         {
-            query = query.Where(p => p.Price.Amount <= maxPrice.Value);
+            query = query.Where(p => p.Price.Amount <= maxPrice);
         }
 
         if (!string.IsNullOrWhiteSpace(currency))
@@ -81,6 +121,15 @@ public sealed class ProductRepository(ApplicationDbContext dbContext) : IProduct
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken);
+
+        foreach (var product in items)
+        {
+            var categoryIds = await dbContext.ProductsCategories
+                .Where(pc => pc.ProductId == product.Id)
+                .Select(pc => pc.CategoryId)
+                .ToListAsync(cancellationToken);
+            categoryIds.ForEach(product.AddCategory);
+        }
 
         return PagedResult<Product>.Create(items, totalCount, page, pageSize);
     }

@@ -1,5 +1,4 @@
-﻿using Ecomm.Products.WebApi.Features.Products.Domain;
-using Ecomm.Products.WebApi.Shared.Domain.Pagination;
+﻿using Ecomm.Products.WebApi.Shared.Domain.Pagination;
 
 namespace Ecomm.Products.WebApi.Features.Products.Domain.Repositories;
 

@@ -3,6 +3,7 @@ using System;
 using Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250710233639_v-01-5")]
+    partial class v015
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,12 +132,12 @@ namespace Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Migrations
                         .HasColumnName("category_id");
 
                     b.HasKey("ProductId", "CategoryId")
-                        .HasName("pk_products_categories");
+                        .HasName("pk_product_category");
 
                     b.HasIndex("CategoryId")
-                        .HasDatabaseName("ix_products_categories_category_id");
+                        .HasDatabaseName("ix_product_category_category_id");
 
-                    b.ToTable("products_categories", (string)null);
+                    b.ToTable("product_category", (string)null);
                 });
 
             modelBuilder.Entity("Ecomm.Products.WebApi.Features.Categories.Domain.Category", b =>
@@ -314,14 +317,14 @@ namespace Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_products_categories_categories_category_id");
+                        .HasConstraintName("fk_product_category_categories_category_id");
 
                     b.HasOne("Ecomm.Products.WebApi.Features.Products.Domain.Product", null)
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_products_categories_products_product_id");
+                        .HasConstraintName("fk_product_category_products_product_id");
                 });
 
             modelBuilder.Entity("Ecomm.Products.WebApi.Features.Categories.Domain.Category", b =>

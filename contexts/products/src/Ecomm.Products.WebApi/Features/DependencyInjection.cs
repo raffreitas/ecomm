@@ -1,4 +1,5 @@
-﻿using Ecomm.Products.WebApi.Features.Inventory;
+﻿using Ecomm.Products.WebApi.Features.Categories;
+using Ecomm.Products.WebApi.Features.Inventory;
 using Ecomm.Products.WebApi.Features.Products;
 using Ecomm.Products.WebApi.Shared.Domain.Events;
 
@@ -10,6 +11,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 
+        services.AddCategoriesFeature();
         services.AddProductsFeature();
         services.AddInventoryFeature();
         return services;

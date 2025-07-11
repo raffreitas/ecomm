@@ -1,4 +1,3 @@
-using Ecomm.Products.WebApi.Features.Products.Domain.Entities;
 using Ecomm.Products.WebApi.Features.Products.Domain.Repositories;
 using Ecomm.Products.WebApi.Shared.Abstractions;
 using Ecomm.Products.WebApi.Shared.Domain.ValueObjects;
@@ -24,13 +23,12 @@ internal sealed class UpdateProductHandler(
             throw new NotFoundException($"Product with ID {command.Id} not found.");
 
         var price = Price.Create(command.Price, command.Currency);
-        var categories = command.Categories.Select(Category.Create).ToArray();
 
         product.Update(
             command.Name,
             command.Description,
             price,
-            categories);
+            command.CategoryIds);
 
         await unitOfWork.CommitAsync(ct);
     }

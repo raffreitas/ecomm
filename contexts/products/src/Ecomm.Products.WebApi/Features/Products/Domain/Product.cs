@@ -1,5 +1,4 @@
-﻿using Ecomm.Products.WebApi.Features.Products.Domain.Entities;
-using Ecomm.Products.WebApi.Features.Products.Domain.Events;
+﻿using Ecomm.Products.WebApi.Features.Products.Domain.Events;
 using Ecomm.Products.WebApi.Features.Products.Domain.ValueObject;
 using Ecomm.Products.WebApi.Shared.Domain.Abstractions;
 using Ecomm.Products.WebApi.Shared.Domain.ValueObjects;
@@ -8,7 +7,7 @@ namespace Ecomm.Products.WebApi.Features.Products.Domain;
 
 public sealed class Product : AggregateRoot
 {
-    private readonly List<Category> _categories = [];
+    private readonly List<Guid> _categoryIds = [];
     private readonly List<Image> _images = [];
 
     public string Name { get; private set; }
@@ -16,7 +15,7 @@ public sealed class Product : AggregateRoot
     public bool IsListed { get; private set; }
     public Price Price { get; private set; }
     public IReadOnlyList<Image> Images => _images.AsReadOnly();
-    public IReadOnlyList<Category> Categories => _categories.AsReadOnly();
+    public IReadOnlyList<Guid> CategoryIds => _categoryIds.AsReadOnly();
 
     #region EF Constructor
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
@@ -26,7 +25,7 @@ public sealed class Product : AggregateRoot
     }
     #endregion
 
-    private Product(string name, string description, Price price, Category[] categories)
+    private Product(string name, string description, Price price, IEnumerable<Guid> categoryIds)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Product name cannot be null or empty.", nameof(name));
@@ -38,16 +37,14 @@ public sealed class Product : AggregateRoot
         Name = name;
         Description = description;
         Price = price;
-        _categories = [.. categories];
+        _categoryIds = categoryIds?.ToList() ?? [];
         IsListed = false;
     }
 
-    public static Product Create(string name, string description, Price price, Category[] categories)
+    public static Product Create(string name, string description, Price price, IEnumerable<Guid> categoryIds)
     {
-        var product = new Product(name, description, price, categories);
-
+        var product = new Product(name, description, price, categoryIds);
         product.AddDomainEvent(new ProductCreatedDomainEvent(product.Id, name, description, price));
-
         return product;
     }
 
@@ -56,7 +53,10 @@ public sealed class Product : AggregateRoot
         _images.Add(image);
     }
 
-    public void Update(string name, string description, Price price, Category[] categories)
+    public void AddCategory(Guid categoryId)
+        => _categoryIds.Add(categoryId);
+
+    public void Update(string name, string description, Price price, IEnumerable<Guid> categoryIds)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Product name cannot be null or empty.", nameof(name));
@@ -68,8 +68,9 @@ public sealed class Product : AggregateRoot
         Name = name;
         Description = description;
         Price = price;
-        _categories.Clear();
-        _categories.AddRange(categories);
+        _categoryIds.Clear();
+        if (categoryIds is not null)
+            _categoryIds.AddRange(categoryIds);
     }
 
     public void ToggleListing()

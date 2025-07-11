@@ -29,7 +29,7 @@ public class UpdateProductEndpoint : IEndpoint
             Description = request.Description,
             Price = request.Price,
             Currency = request.Currency,
-            Categories = request.Categories
+            CategoryIds = request.CategoryIds
         };
 
         await handler.Handle(command, ct);
@@ -44,5 +44,5 @@ public sealed record UpdateProductRequest
     public required string Description { get; init; }
     public required decimal Price { get; init; }
     public required string Currency { get; init; }
-    public required string[] Categories { get; init; } = [];
+    public required Guid[] CategoryIds { get; init; } = [];
 }

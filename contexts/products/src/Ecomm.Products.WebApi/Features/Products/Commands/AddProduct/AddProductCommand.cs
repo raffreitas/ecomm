@@ -4,7 +4,7 @@ namespace Ecomm.Products.WebApi.Features.Products.Commands.AddProduct;
 
 public sealed record AddProductCommand
 {
-    public required string[] Categories { get; init; } = [];
+    public required Guid[] CategoryIds { get; init; } = [];
     public required string Name { get; init; }
     public required string Description { get; init; }
     public required decimal Price { get; init; }
@@ -37,7 +37,7 @@ public sealed class AddProductCommandValidator : AbstractValidator<AddProductCom
             .Length(3)
             .WithMessage("Currency must be exactly 3 characters.");
 
-        RuleFor(x => x.Categories)
+        RuleFor(x => x.CategoryIds)
             .NotEmpty()
             .WithMessage("At least one category is required.");
     }

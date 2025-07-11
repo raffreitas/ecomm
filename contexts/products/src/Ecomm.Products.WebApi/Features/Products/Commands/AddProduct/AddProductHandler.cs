@@ -1,5 +1,4 @@
 ﻿using Ecomm.Products.WebApi.Features.Products.Domain;
-using Ecomm.Products.WebApi.Features.Products.Domain.Entities;
 using Ecomm.Products.WebApi.Features.Products.Domain.Repositories;
 using Ecomm.Products.WebApi.Shared.Abstractions;
 using Ecomm.Products.WebApi.Shared.Domain.ValueObjects;
@@ -17,7 +16,7 @@ internal sealed class AddProductHandler(
             command.Name,
             command.Description,
             Price.Create(command.Price, command.Currency),
-            [.. command.Categories.Select(Category.Create)]
+            [.. command.CategoryIds]
         );
 
         await productRepository.AddAsync(product, ct);

@@ -1,4 +1,5 @@
 ﻿using Ecomm.Products.WebApi.Features.Products.Domain;
+using Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Models;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -32,16 +33,15 @@ internal sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
             images.Property(x => x.AltText).IsRequired().HasMaxLength(100);
         });
 
-        builder.OwnsMany(x => x.Categories, categories =>
-        {
-            categories.ToTable("product_categories");
-            categories.WithOwner().HasForeignKey("product_id");
-            categories.Property(x => x.Name).IsRequired().HasMaxLength(50);
-        });
+        builder
+            .HasMany<ProductCategory>()
+            .WithOne()
+            .HasForeignKey(pc => pc.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(x => x.IsListed)
             .IsRequired()
-            .HasDefaultValue(true);
+            .HasDefaultValue(false);
 
         builder.OwnsOne(x => x.Price, price =>
         {
