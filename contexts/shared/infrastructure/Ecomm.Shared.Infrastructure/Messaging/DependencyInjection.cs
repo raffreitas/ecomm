@@ -4,6 +4,7 @@ using Ecomm.Shared.Infrastructure.Shared.Extensions;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 using RabbitMQ.Client;
 
@@ -37,5 +38,7 @@ public static class DependencyInjection
 
         services.AddSingleton<IMessagePublisher, RabbitMqMessagePublisher>();
         services.AddSingleton<IMessageConsumer, RabbitMqMessageConsumer>();
+        services.AddSingleton<ITopologyInitializer, RabbitMqTopologyInitializer>(provider => 
+            new RabbitMqTopologyInitializer(connectionFactory, provider.GetRequiredService<IOptions<RabbitMqMessageSettings>>()));
     }
 }

@@ -10,19 +10,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ecomm.Products.WebApi.Shared.Workers;
 
-public class OutboxEventPublisherWorker(
+public sealed class OutboxEventPublisherWorker(
     IServiceProvider serviceProvider,
     ILogger<OutboxEventPublisherWorker> logger,
     IMessagePublisher messagePublisher) : BackgroundService
 {
+    private const int DelayBetweenRetriesInSeconds = 5;
+
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        using var scope = serviceProvider.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var eventMessageMapper = scope.ServiceProvider.GetRequiredService<IIntegrationEventMessageMapper>();
+        var topologyInitializer = scope.ServiceProvider.GetRequiredService<ITopologyInitializer>();
+
+        await topologyInitializer.InitializeAsync(stoppingToken);
+
         while (!stoppingToken.IsCancellationRequested)
         {
-            using var scope = serviceProvider.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            var eventMessageMapper = scope.ServiceProvider.GetRequiredService<IIntegrationEventMessageMapper>();
-
             var pendingEvents = await dbContext.Set<OutboxEvent>()
                 .Where(e => e.ProcessedAt == null && e.RetryCount > 0)
                 .OrderBy(e => e.CreatedAt)
@@ -34,11 +39,11 @@ public class OutboxEventPublisherWorker(
                 try
                 {
                     var eventType = Type.GetType(outboxEvent.Type ?? "");
-                    if (eventType == null || !typeof(IntegrationEvent).IsAssignableFrom(eventType))
+                    if (eventType is null || !typeof(IntegrationEvent).IsAssignableFrom(eventType))
                         throw new InvalidOperationException($"Type {outboxEvent.Type} is not a valid IntegrationEvent.");
 
                     var integrationEvent = (IntegrationEvent?)JsonSerializer.Deserialize(outboxEvent.Content, eventType);
-                    if (integrationEvent == null)
+                    if (integrationEvent is null)
                         throw new InvalidOperationException($"Failed to deserialize event content for type {outboxEvent.Type}.");
 
                     var message = eventMessageMapper.Map(integrationEvent);
@@ -55,7 +60,7 @@ public class OutboxEventPublisherWorker(
             }
 
             await dbContext.SaveChangesAsync(stoppingToken);
-            await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+            await Task.Delay(TimeSpan.FromSeconds(DelayBetweenRetriesInSeconds), stoppingToken);
         }
     }
 }

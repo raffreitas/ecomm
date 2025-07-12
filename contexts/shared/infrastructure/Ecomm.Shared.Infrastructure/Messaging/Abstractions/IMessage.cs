@@ -3,4 +3,5 @@
 public interface IMessage
 {
     public string MessageType { get; }
+    public object Payload { get; }
 }

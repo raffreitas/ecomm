@@ -3,8 +3,8 @@ using Ecomm.Shared.Infrastructure.Messaging.Abstractions;
 
 namespace Ecomm.Products.WebApi.Shared.Infrastructure.Messaging;
 
-public class IntegrationEventMessageAdapter(IntegrationEvent integrationEvent) : IMessage
+public sealed class IntegrationEventMessageAdapter(IntegrationEvent integrationEvent) : IMessage
 {
-    public IntegrationEvent IntegrationEvent { get; } = integrationEvent;
-    public string MessageType => IntegrationEvent.GetType().Name;
+    public string MessageType => integrationEvent.GetType().Name;
+    public object Payload => integrationEvent;
 }

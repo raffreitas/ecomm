@@ -3,7 +3,7 @@ using Ecomm.Shared.Infrastructure.Messaging.Abstractions;
 
 namespace Ecomm.Products.WebApi.Shared.Infrastructure.Messaging;
 
-public class IntegrationEventMessageMapper : IIntegrationEventMessageMapper
+public sealed class IntegrationEventMessageMapper : IIntegrationEventMessageMapper
 {
     public IMessage Map(IntegrationEvent integrationEvent)
     {
