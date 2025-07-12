@@ -5,6 +5,7 @@ using Ecomm.Products.WebApi.Shared.Infrastructure.Messaging;
 using Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Context;
 using Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Models;
 using Ecomm.Shared.Infrastructure.Messaging.Abstractions;
+using Ecomm.Shared.Infrastructure.Observability.Correlation.Factory;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +14,8 @@ namespace Ecomm.Products.WebApi.Shared.Workers;
 public sealed class OutboxEventPublisherWorker(
     IServiceProvider serviceProvider,
     ILogger<OutboxEventPublisherWorker> logger,
-    IMessagePublisher messagePublisher) : BackgroundService
+    IMessagePublisher messagePublisher,
+    ICorrelationContextFactory correlationContextFactory) : BackgroundService
 {
     private const int DelayBetweenRetriesInSeconds = 5;
 
@@ -36,6 +38,7 @@ public sealed class OutboxEventPublisherWorker(
 
             foreach (var outboxEvent in pendingEvents)
             {
+                correlationContextFactory.Create(outboxEvent.CorrelationId);
                 try
                 {
                     var eventType = Type.GetType(outboxEvent.Type ?? "");
