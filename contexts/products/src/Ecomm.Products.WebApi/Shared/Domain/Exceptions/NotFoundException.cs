@@ -1,5 +1,3 @@
-using System;
-
 namespace Ecomm.Products.WebApi.Shared.Domain.Exceptions;
 
 public class NotFoundException : Exception
