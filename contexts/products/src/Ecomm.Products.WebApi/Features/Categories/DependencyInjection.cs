@@ -1,6 +1,6 @@
 using Ecomm.Products.WebApi.Features.Categories.Commands.CreateCategory;
-using Ecomm.Products.WebApi.Features.Categories.Commands.UpdateCategory;
 using Ecomm.Products.WebApi.Features.Categories.Commands.DeleteCategory;
+using Ecomm.Products.WebApi.Features.Categories.Commands.UpdateCategory;
 using Ecomm.Products.WebApi.Features.Categories.Domain.Repositories;
 using Ecomm.Products.WebApi.Features.Categories.Infrastructure.Repositories;
 using Ecomm.Products.WebApi.Features.Categories.Queries.GetCategories;

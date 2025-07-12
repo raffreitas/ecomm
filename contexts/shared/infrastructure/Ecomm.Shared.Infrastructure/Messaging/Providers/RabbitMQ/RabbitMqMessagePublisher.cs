@@ -23,7 +23,7 @@ internal sealed class RabbitMqMessagePublisher(
 
     public async Task PublishAsync<TMessage>(TMessage message, CancellationToken cancellationToken = default) where TMessage : IMessage
     {
-        var messageType = message.GetType().Name;
+        var messageType = message.MessageType;
         var messageSettings = _settings.GetMessageSettings(messageType);
 
         var properties = GetBasicProperties(messageType);

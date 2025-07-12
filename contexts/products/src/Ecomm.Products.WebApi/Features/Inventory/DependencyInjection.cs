@@ -7,6 +7,7 @@ using Ecomm.Products.WebApi.Features.Inventory.Commands.ReleaseReservedStock;
 using Ecomm.Products.WebApi.Features.Inventory.Commands.RemoveStock;
 using Ecomm.Products.WebApi.Features.Inventory.Commands.ReserveStock;
 using Ecomm.Products.WebApi.Features.Inventory.Commands.UpdateInventoryLimits;
+using Ecomm.Products.WebApi.Features.Inventory.Domain.Events;
 using Ecomm.Products.WebApi.Features.Inventory.Domain.Repositories;
 using Ecomm.Products.WebApi.Features.Inventory.Events.Handlers;
 using Ecomm.Products.WebApi.Features.Inventory.Infrastructure.Repositories;
@@ -25,9 +26,12 @@ public static class DependencyInjection
         services.AddScoped<IInventoryRepository, InventoryRepository>();
 
         services.AddScoped<IDomainEventHandler<ProductCreatedDomainEvent>, CreateItemOnInventoryDomainEventHandler>();
+        services.AddScoped<IDomainEventHandler<StockBelowMinimumDomainEvent>, StockBelowMinimumDomainEventHandler>();
+        services.AddScoped<IDomainEventHandler<StockCreatedDomainEvent>, StockCreatedDomainEventHandler>();
+        services.AddScoped<IDomainEventHandler<StockDepletedDomainEvent>, StockDepletedDomainEventHandler>();
+        services.AddScoped<IDomainEventHandler<StockReplenishedDomainEvent>, StockReplenishedDomainEventHandler>();
 
         services.AddScoped<IInventoryAvailabilityService, InventoryAvailabilityService>();
-
 
         // Command handlers
         services.AddScoped<CreateInventoryHandler>();

@@ -4,6 +4,8 @@ using Ecomm.Products.WebApi.Features;
 using Ecomm.Products.WebApi.Shared.Infrastructure.Persistence;
 using Ecomm.Products.WebApi.Shared.Infrastructure.SemanticKernel;
 using Ecomm.Products.WebApi.Shared.Presentation;
+using Ecomm.Products.WebApi.Shared.Workers;
+using Ecomm.Shared.Infrastructure.Messaging;
 using Ecomm.Shared.Infrastructure.Observability;
 
 namespace Ecomm.Products.WebApi;
@@ -23,6 +25,8 @@ public static class Startup
         services.AddFeaturesConfiguration();
         services.AddSemanticKernelConfiguration(configuration);
         //services.AddObservabilityConfiguration(configuration);
+        services.AddSharedWorkers();
+        services.AddMessagingConfiguration(configuration);
     }
 
     public static void ConfigureApp(WebApplication app)

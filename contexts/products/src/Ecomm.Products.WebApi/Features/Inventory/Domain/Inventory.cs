@@ -33,7 +33,6 @@ public sealed class Inventory : AggregateRoot
         IsActive = true;
         LastUpdated = DateTime.UtcNow;
 
-        // Evento de domínio para criação de estoque
         AddDomainEvent(new StockCreatedDomainEvent(
             Id,
             ProductId,
