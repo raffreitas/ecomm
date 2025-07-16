@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Ecomm.Products.WebApi/Ecomm.Products.WebApi.csproj" />
+  </Folder>
+</Solution>

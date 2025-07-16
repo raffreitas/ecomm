@@ -1,0 +1,11 @@
+﻿namespace Ecomm.Shared.Infrastructure.Observability.Correlation.Context;
+public class CorrelationContext
+{
+    public string CorrelationId { get; }
+
+    public CorrelationContext(string correlationId)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(correlationId);
+        CorrelationId = correlationId;
+    }
+}

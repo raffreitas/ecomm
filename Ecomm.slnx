@@ -1,0 +1,21 @@
+<Solution>
+  <Folder Name="/Services/" />
+  <Folder Name="/Services/Catalog/">
+    <Project Path="contexts/catalog/src/Ecomm.Catalog.WebApi/Ecomm.Catalog.WebApi.csproj" />
+  </Folder>
+  <Folder Name="/Services/Products/">
+    <Project Path="contexts\products\src\Ecomm.Products.WebApi\Ecomm.Products.WebApi.csproj" />
+    <Project Path="contexts\products\tests\Ecomm.Products.WebApi.UnitTests\Ecomm.Products.WebApi.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/Shared/" />
+  <Folder Name="/Shared/Aspire/">
+    <Project Path="contexts\shared\aspire\Aspire.AppHost\Aspire.AppHost.csproj" />
+    <Project Path="contexts\shared\aspire\Aspire.ServiceDefaults\Aspire.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/Shared/Domain/">
+    <Project Path="contexts/shared/domain/Ecomm.Shared.SeedWork/Ecomm.Shared.SeedWork.csproj" Id="48c074a1-2a2b-46a2-bf06-6e2d93942286" />
+  </Folder>
+  <Folder Name="/Shared/Infrastructure/">
+    <Project Path="contexts\shared\infrastructure\Ecomm.Shared.Infrastructure\Ecomm.Shared.Infrastructure.csproj" />
+  </Folder>
+</Solution>
