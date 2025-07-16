@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\shared\aspire\Aspire.ServiceDefaults\Aspire.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\..\shared\domain\Ecomm.Shared.SeedWork\Ecomm.Shared.SeedWork.csproj" />
     <ProjectReference Include="..\..\..\shared\infrastructure\Ecomm.Shared.Infrastructure\Ecomm.Shared.Infrastructure.csproj" />
   </ItemGroup>
 

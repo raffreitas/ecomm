@@ -1,7 +1,7 @@
 ﻿using Ecomm.Products.WebApi.Features.Categories;
 using Ecomm.Products.WebApi.Features.Inventory;
 using Ecomm.Products.WebApi.Features.Products;
-using Ecomm.Products.WebApi.Shared.Domain.Events;
+using Ecomm.Products.WebApi.Shared.Application.Events;
 
 namespace Ecomm.Products.WebApi.Features;
 

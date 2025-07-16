@@ -8,6 +8,9 @@ var postgresql = builder.AddPostgres("postgressql")
     .WithHostPort(5432)
     .WithDataVolume();
 
+var eventstore = builder.AddEventStore("eventstore")
+    .WithDataVolume();
+
 var productsDb = postgresql
     .AddDatabase("products");
 
@@ -18,6 +21,8 @@ builder
     .WithReference(productsDb, "DatabaseConnection")
         .WaitFor(postgresql)
     .WithReference(rabbitmq, "MessageBrokerConnection")
-        .WaitFor(rabbitmq);
+        .WaitFor(rabbitmq)
+    .WithReference(eventstore, "EventStoreConnection")
+        .WaitFor(eventstore);
 
 await builder.Build().RunAsync();

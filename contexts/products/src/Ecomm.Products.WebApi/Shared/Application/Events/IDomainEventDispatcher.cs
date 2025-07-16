@@ -1,6 +1,6 @@
-﻿using Ecomm.Products.WebApi.Shared.Domain.Abstractions;
+﻿using Ecomm.Shared.SeedWork;
 
-namespace Ecomm.Products.WebApi.Shared.Domain.Events;
+namespace Ecomm.Products.WebApi.Shared.Application.Events;
 
 public interface IDomainEventDispatcher
 {

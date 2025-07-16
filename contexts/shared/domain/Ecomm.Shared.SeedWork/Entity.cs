@@ -1,4 +1,4 @@
-﻿namespace Ecomm.Products.WebApi.Shared.Domain.Abstractions;
+﻿namespace Ecomm.Shared.SeedWork;
 
 public abstract class Entity
 {

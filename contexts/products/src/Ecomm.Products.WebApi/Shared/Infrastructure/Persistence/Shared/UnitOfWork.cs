@@ -1,7 +1,7 @@
 ﻿using Ecomm.Products.WebApi.Shared.Abstractions;
-using Ecomm.Products.WebApi.Shared.Domain.Abstractions;
-using Ecomm.Products.WebApi.Shared.Domain.Events;
+using Ecomm.Products.WebApi.Shared.Application.Events;
 using Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Context;
+using Ecomm.Shared.SeedWork;
 
 namespace Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Shared;
 

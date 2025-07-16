@@ -1,7 +1,7 @@
 ﻿using Ecomm.Products.WebApi.Features.Products.Domain.Events;
 using Ecomm.Products.WebApi.Features.Products.Domain.ValueObject;
-using Ecomm.Products.WebApi.Shared.Domain.Abstractions;
 using Ecomm.Products.WebApi.Shared.Domain.ValueObjects;
+using Ecomm.Shared.SeedWork;
 
 namespace Ecomm.Products.WebApi.Features.Products.Domain;
 

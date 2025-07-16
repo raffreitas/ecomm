@@ -7,6 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="KurrentDB.Client" Version="1.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.7" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.7" />
@@ -26,6 +27,10 @@
 
 	<ItemGroup>
 	  <Folder Include="Observability\Setup\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\domain\Ecomm.Shared.SeedWork\Ecomm.Shared.SeedWork.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using Ecomm.Products.WebApi.Features.Inventory.Domain.Repositories;
 using Ecomm.Products.WebApi.Features.Inventory.Domain.ValueObject;
 using Ecomm.Products.WebApi.Features.Products.Domain.Events;
-using Ecomm.Products.WebApi.Shared.Domain.Abstractions;
+using Ecomm.Shared.SeedWork;
 
 using InventoryEntity = Ecomm.Products.WebApi.Features.Inventory.Domain.Inventory;
 

@@ -1,7 +1,7 @@
 ﻿using Ecomm.Products.WebApi.Features.Categories.Domain;
 using Ecomm.Products.WebApi.Features.Products.Domain;
-using Ecomm.Products.WebApi.Shared.Domain.Abstractions;
 using Ecomm.Products.WebApi.Shared.Infrastructure.Persistence.Models;
+using Ecomm.Shared.SeedWork;
 
 using Microsoft.EntityFrameworkCore;
 

@@ -15,7 +15,7 @@ using Ecomm.Products.WebApi.Features.Inventory.Queries.GetInventoriesPaged;
 using Ecomm.Products.WebApi.Features.Inventory.Queries.GetInventoryByProductId;
 using Ecomm.Products.WebApi.Features.Inventory.Queries.GetLowStockInventories;
 using Ecomm.Products.WebApi.Features.Products.Domain.Events;
-using Ecomm.Products.WebApi.Shared.Domain.Abstractions;
+using Ecomm.Shared.SeedWork;
 
 namespace Ecomm.Products.WebApi.Features.Inventory;
 

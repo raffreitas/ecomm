@@ -1,8 +1,9 @@
 ﻿using System.Collections.Concurrent;
 
-using Ecomm.Products.WebApi.Shared.Domain.Abstractions;
+using Ecomm.Shared.Infrastructure.EventSourcing.Abstractions;
+using Ecomm.Shared.SeedWork;
 
-namespace Ecomm.Products.WebApi.Shared.Domain.Events;
+namespace Ecomm.Products.WebApi.Shared.Application.Events;
 
 internal sealed class DomainEventDispatcher(IServiceProvider serviceProvider) : IDomainEventDispatcher
 {
@@ -18,6 +19,9 @@ internal sealed class DomainEventDispatcher(IServiceProvider serviceProvider) : 
             Type handlerType = HandlerTypeDictionary.GetOrAdd(
                 domainEventType,
                 et => typeof(IDomainEventHandler<>).MakeGenericType(et));
+
+            var eventSourceService = serviceProvider.GetRequiredService<IEventStoreService>();
+            await eventSourceService.SaveEvent(domainEvent, cancellationToken);
 
             IEnumerable<object?> handlers = serviceProvider.GetServices(handlerType);
 
