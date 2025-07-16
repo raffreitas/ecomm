@@ -42,9 +42,11 @@ public sealed class Inventory : AggregateRoot
         ));
     }
 
-    public static Inventory Create(Guid productId, Quantity quantity, Quantity? minimumStockLevel = null, Quantity? maximumStockLevel = null)
+    public static Inventory Create(Guid productId, Quantity quantity, Quantity? minimumStockLevel = null,
+        Quantity? maximumStockLevel = null)
     {
-        return new Inventory(productId, quantity, minimumStockLevel ?? Quantity.Create(0), maximumStockLevel ?? Quantity.Create(int.MaxValue));
+        return new Inventory(productId, quantity, minimumStockLevel ?? Quantity.Create(0),
+            maximumStockLevel ?? Quantity.Create(int.MaxValue));
     }
 
     public void AddStock(Quantity quantityToAdd)
@@ -59,6 +61,7 @@ public sealed class Inventory : AggregateRoot
         {
             AddDomainEvent(new StockReplenishedDomainEvent(Id, ProductId, Quantity.Value));
         }
+
         if (IsBelowMinimum())
         {
             AddDomainEvent(new StockReplenishedDomainEvent(Id, ProductId, Quantity.Value));
@@ -83,6 +86,7 @@ public sealed class Inventory : AggregateRoot
         {
             AddDomainEvent(new StockBelowMinimumDomainEvent(Id, ProductId, Quantity, MinimumStockLevel));
         }
+
         if (Quantity == 0)
         {
             AddDomainEvent(new StockDepletedDomainEvent(Id, ProductId));
