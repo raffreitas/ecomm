@@ -2,6 +2,7 @@ using Ecomm.Products.WebApi.Features.Inventory.Application;
 using Ecomm.Products.WebApi.Features.Products.Domain.Repositories;
 using Ecomm.Products.WebApi.Shared.Abstractions;
 using Ecomm.Products.WebApi.Shared.Domain.Exceptions;
+using Ecomm.Products.WebApi.Shared.Exceptions;
 
 namespace Ecomm.Products.WebApi.Features.Products.Commands.ToggleProductListing;
 

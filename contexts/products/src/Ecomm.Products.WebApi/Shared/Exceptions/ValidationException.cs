@@ -3,7 +3,7 @@
 public sealed class ValidationException : Exception
 {
     public const string ErrorMessage = "Error on validation exception.";
-    public string[] Errors { get; } = [];
+    public string[] Errors { get; }
 
     public ValidationException(string[] errors) : base(ErrorMessage)
     {

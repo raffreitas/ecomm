@@ -2,7 +2,7 @@
 using Ecomm.Products.WebApi.Features.Categories.Domain;
 using Ecomm.Products.WebApi.Features.Categories.Domain.Repositories;
 using Ecomm.Products.WebApi.Shared.Abstractions;
-using Ecomm.Products.WebApi.Shared.Domain.Exceptions;
+using Ecomm.Products.WebApi.Shared.Exceptions;
 
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;

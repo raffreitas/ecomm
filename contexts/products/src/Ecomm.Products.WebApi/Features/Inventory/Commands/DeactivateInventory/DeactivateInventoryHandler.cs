@@ -1,6 +1,6 @@
 using Ecomm.Products.WebApi.Features.Inventory.Domain.Repositories;
 using Ecomm.Products.WebApi.Shared.Abstractions;
-using Ecomm.Products.WebApi.Shared.Domain.Exceptions;
+using Ecomm.Products.WebApi.Shared.Exceptions;
 
 namespace Ecomm.Products.WebApi.Features.Inventory.Commands.DeactivateInventory;
 
