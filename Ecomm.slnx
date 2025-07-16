@@ -1,5 +1,8 @@
 <Solution>
   <Folder Name="/Services/" />
+  <Folder Name="/Services/Catalog/">
+    <Project Path="contexts/catalog/src/Ecomm.Catalog.WebApi/Ecomm.Catalog.WebApi.csproj" />
+  </Folder>
   <Folder Name="/Services/Products/">
     <Project Path="contexts\products\src\Ecomm.Products.WebApi\Ecomm.Products.WebApi.csproj" />
     <Project Path="contexts\products\tests\Ecomm.Products.WebApi.UnitTests\Ecomm.Products.WebApi.UnitTests.csproj" />

@@ -19,6 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\catalog\src\Ecomm.Catalog.WebApi\Ecomm.Catalog.WebApi.csproj" />
 		<ProjectReference Include="..\..\..\products\src\Ecomm.Products.WebApi\Ecomm.Products.WebApi.csproj" />
 	</ItemGroup>
 

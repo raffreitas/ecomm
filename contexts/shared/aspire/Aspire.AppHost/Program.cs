@@ -25,4 +25,6 @@ builder
     .WithReference(eventstore, "EventStoreConnection")
         .WaitFor(eventstore);
 
+builder.AddProject<Projects.Ecomm_Catalog_WebApi>("ecomm-catalog-webapi");
+
 await builder.Build().RunAsync();
