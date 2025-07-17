@@ -11,6 +11,9 @@ var postgresql = builder.AddPostgres("postgressql")
 var eventstore = builder.AddEventStore("eventstore")
     .WithDataVolume();
 
+var mongodb = builder.AddMongoDB("mongodb")
+    .WithDataVolume();
+
 var productsDb = postgresql
     .AddDatabase("products");
 
@@ -25,6 +28,11 @@ builder
     .WithReference(eventstore, "EventStoreConnection")
         .WaitFor(eventstore);
 
-builder.AddProject<Projects.Ecomm_Catalog_WebApi>("ecomm-catalog-webapi");
+builder
+    .AddProject<Projects.Ecomm_Catalog_WebApi>("ecomm-catalog-webapi")
+    .WithReference(mongodb, "MongoDBConnection")
+        .WaitFor(mongodb)
+    .WithReference(rabbitmq, "MessageBrokerConnection")
+        .WaitFor(rabbitmq); ;
 
 await builder.Build().RunAsync();

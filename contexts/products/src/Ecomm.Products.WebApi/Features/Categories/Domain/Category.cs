@@ -1,3 +1,4 @@
+using Ecomm.Products.WebApi.Features.Categories.Domain.Events;
 using Ecomm.Shared.SeedWork;
 
 namespace Ecomm.Products.WebApi.Features.Categories.Domain;
@@ -24,6 +25,8 @@ public sealed class Category : AggregateRoot
         Parent = parent;
         ParentCategoryId = parent?.Id;
         parent?._children.Add(this);
+
+        AddDomainEvent(CategoryCreatedDomainEvent.FromCategory(this));
     }
 
     public static Category Create(string name, Category? parent = null)
@@ -39,5 +42,7 @@ public sealed class Category : AggregateRoot
             Parent = parent;
             ParentCategoryId = parent.Id;
         }
+
+        AddDomainEvent(CategoryUpdatedDomainEvent.FromCategory(this));
     }
 }

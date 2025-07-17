@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Ecomm.Products.WebApi.Shared.Workers;
 
 public sealed class OutboxEventPublisherWorker(
-    IServiceProvider serviceProvider,
+    IServiceScopeFactory serviceFactory,
     ILogger<OutboxEventPublisherWorker> logger,
     IMessagePublisher messagePublisher,
     ICorrelationContextFactory correlationContextFactory) : BackgroundService
@@ -21,7 +21,7 @@ public sealed class OutboxEventPublisherWorker(
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        using var scope = serviceProvider.CreateScope();
+        using var scope = serviceFactory.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var eventMessageMapper = scope.ServiceProvider.GetRequiredService<IIntegrationEventMessageMapper>();
         var topologyInitializer = scope.ServiceProvider.GetRequiredService<ITopologyInitializer>();
