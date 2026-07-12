@@ -1,11 +1,18 @@
 using Ecomm.Catalog.Common.Messaging;
-using Ecomm.Catalog.Features.Categories.CreateCategory;
 using Ecomm.Catalog.Infrastructure.Messaging;
 using Ecomm.Catalog.Infrastructure.Persistence;
 
 using FluentValidation;
 
 using Microsoft.EntityFrameworkCore;
+
+using Ecomm.Catalog.Features.Categories.CreateCategory;
+using Ecomm.Catalog.Features.Categories.GetCategories;
+using Ecomm.Catalog.Features.Categories.GetCategoryById;
+using Ecomm.Catalog.Features.Categories.GetProducts;
+using Ecomm.Catalog.Features.Products.CreateProduct;
+using Ecomm.Catalog.Features.Products.GetProductById;
+using Ecomm.Catalog.Features.Products.GetProducts;
 
 namespace Ecomm.Catalog.Infrastructure;
 
@@ -24,7 +31,21 @@ public static class DependencyInjection
 
     public static IServiceCollection AddFeatureValidation(this IServiceCollection services)
     {
-        services.AddValidatorsFromAssemblyContaining<Validator>();
+        services.AddValidatorsFromAssemblyContaining<
+            global::Ecomm.Catalog.Features.Categories.CreateCategory.Validator>();
+        return services;
+    }
+
+    public static IServiceCollection AddFeatureHandlers(this IServiceCollection services)
+    {
+        services.AddScoped<CreateCategoryHandler>();
+        services.AddScoped<GetCategoriesHandler>();
+        services.AddScoped<GetCategoryByIdHandler>();
+        services.AddScoped<GetProductsByCategoryHandler>();
+        services.AddScoped<CreateProductHandler>();
+        services.AddScoped<GetProductByIdHandler>();
+        services.AddScoped<GetProductsHandler>();
+
         return services;
     }
 

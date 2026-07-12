@@ -1,10 +1,10 @@
-using CreateCategoryEndpoint = Ecomm.Catalog.Features.Categories.CreateCategory.Endpoint;
-using GetCategoriesEndpoint = Ecomm.Catalog.Features.Categories.GetCategories.Endpoint;
-using GetCategoryByIdEndpoint = Ecomm.Catalog.Features.Categories.GetCategoryById.Endpoint;
-using GetProductsByCategoryEndpoint = Ecomm.Catalog.Features.Categories.GetProducts.Endpoint;
-using CreateProductEndpoint = Ecomm.Catalog.Features.Products.CreateProduct.Endpoint;
-using GetProductByIdEndpoint = Ecomm.Catalog.Features.Products.GetProductById.Endpoint;
-using GetProductsEndpoint = Ecomm.Catalog.Features.Products.GetProducts.Endpoint;
+using Ecomm.Catalog.Features.Categories.CreateCategory;
+using Ecomm.Catalog.Features.Categories.GetCategories;
+using Ecomm.Catalog.Features.Categories.GetCategoryById;
+using Ecomm.Catalog.Features.Categories.GetProducts;
+using Ecomm.Catalog.Features.Products.CreateProduct;
+using Ecomm.Catalog.Features.Products.GetProductById;
+using Ecomm.Catalog.Features.Products.GetProducts;
 
 namespace Ecomm.Catalog.Features;
 
