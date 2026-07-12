@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="../../../src/Catalog/Ecomm.Catalog.Api/Ecomm.Catalog.csproj" />
+        <ProjectReference Include="..\..\src\Ecomm.Catalog\Ecomm.Catalog.csproj" />
     </ItemGroup>
 
 </Project>
