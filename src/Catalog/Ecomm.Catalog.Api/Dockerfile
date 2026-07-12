@@ -12,19 +12,19 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/Catalog/Ecomm.Catalog.Api/Ecomm.Catalog.Api.csproj", "src/Catalog/Ecomm.Catalog.Api/"]
-RUN dotnet restore "./src/Catalog/Ecomm.Catalog.Api/Ecomm.Catalog.Api.csproj"
+COPY ["src/Catalog/Ecomm.Catalog.Api/Ecomm.Catalog.csproj", "src/Catalog/Ecomm.Catalog.Api/"]
+RUN dotnet restore "./src/Catalog/Ecomm.Catalog.Api/Ecomm.Catalog.csproj"
 COPY . .
 WORKDIR "/src/src/Catalog/Ecomm.Catalog.Api"
-RUN dotnet build "./Ecomm.Catalog.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./Ecomm.Catalog.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Ecomm.Catalog.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Ecomm.Catalog.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Ecomm.Catalog.Api.dll"]
+ENTRYPOINT ["dotnet", "Ecomm.Catalog.dll"]

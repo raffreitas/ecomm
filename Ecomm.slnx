@@ -2,6 +2,7 @@
   <Folder Name="/Source/" />
   <Folder Name="/Source/Catalog/">
     <Project Path="src/Catalog/Ecomm.Catalog.Api/Ecomm.Catalog.csproj" />
+    <Project Path="tests/Catalog/Ecomm.Catalog.UnitTests/Ecomm.Catalog.UnitTests.csproj" />
   </Folder>
   <Folder Name="/Source/Customers/">
     <Project Path="src/Customers/Ecomm.Customers.Api/Ecomm.Customers.Api.csproj" />
