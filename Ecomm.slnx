@@ -2,7 +2,6 @@
   <Folder Name="/Contexts/" />
   <Folder Name="/Contexts/Catalog/">
     <Project Path="contexts/Catalog/src/Ecomm.Catalog/Ecomm.Catalog.csproj" />
-    <Project Path="contexts/Catalog/tests/Ecomm.Catalog.UnitTests/Ecomm.Catalog.UnitTests.csproj" />
   </Folder>
   <Folder Name="/Contexts/Customers/">
     <Project Path="contexts/Customers/Ecomm.Customers.Api/Ecomm.Customers.Api.csproj" />

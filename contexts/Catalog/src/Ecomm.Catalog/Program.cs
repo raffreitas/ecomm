@@ -12,6 +12,7 @@ builder.Services
     .AddFeatureHandlers();
 
 builder.Services.AddOpenApi();
+builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ApiExceptionHandler>();
 
 var app = builder.Build();
@@ -24,4 +25,4 @@ app.MapScalarApiReference();
 app.ApplyMigrations();
 app.MapCatalogEndpoints();
 
-app.Run();
+await app.RunAsync();

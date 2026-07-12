@@ -1,4 +1,5 @@
 using Ecomm.Catalog.Domain.Entities;
+using Ecomm.Catalog.Infrastructure.Persistence.Entities;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,7 @@ public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : DbCo
 {
     public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<OutboxMessage> OutboxMessages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

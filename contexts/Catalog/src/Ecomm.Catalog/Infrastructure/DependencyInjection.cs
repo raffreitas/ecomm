@@ -24,7 +24,12 @@ public static class DependencyInjection
     {
         services.AddDbContext<CatalogDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DatabaseConnection")));
-        services.AddScoped<IMessageBusService, RabbitMqMessageBusService>();
+        services.Configure<OutboxOptions>(configuration.GetSection(OutboxOptions.SectionName));
+        services.AddSingleton(TimeProvider.System);
+        services.AddSingleton<IEventResolver, EventResolver>();
+        services.AddScoped<IEventPublisher, OutboxEventPublisher>();
+        services.AddSingleton<IEventTransport, RabbitMqEventTransport>();
+        services.AddHostedService<OutboxDispatcher>();
 
         return services;
     }

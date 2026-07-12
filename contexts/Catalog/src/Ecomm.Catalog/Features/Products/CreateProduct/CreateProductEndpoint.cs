@@ -1,4 +1,5 @@
 using Ecomm.Catalog.Features.Contracts;
+using Ecomm.Catalog.Common.Messaging;
 
 using FluentValidation;
 
@@ -69,4 +70,4 @@ public sealed record ProductCreatedIntegrationEvent(
     string Description,
     decimal Price,
     string ImageUrl,
-    Guid CategoryId);
+    Guid CategoryId) : IIntegrationEvent;

@@ -1,5 +1,3 @@
-using System.Text.Json;
-
 using Ecomm.Catalog.Common.Exceptions;
 using Ecomm.Catalog.Common.Messaging;
 using Ecomm.Catalog.Domain.Entities;
@@ -15,10 +13,8 @@ namespace Ecomm.Catalog.Features.Products.CreateProduct;
 public sealed class CreateProductHandler(
     IValidator<Request> validator,
     CatalogDbContext dbContext,
-    IMessageBusService messageBus)
+    IEventPublisher eventPublisher)
 {
-    public const string ProductCreatedQueue = "product.created";
-
     public async Task<ProductResponse> ExecuteAsync(
         Request request,
         CancellationToken cancellationToken = default)
@@ -45,9 +41,6 @@ public sealed class CreateProductHandler(
             CategoryId = request.CategoryId,
         };
 
-        await dbContext.Products.AddAsync(product, cancellationToken);
-        await dbContext.SaveChangesAsync(cancellationToken);
-
         var integrationEvent = new ProductCreatedIntegrationEvent(
             product.Id,
             product.Name,
@@ -56,10 +49,9 @@ public sealed class CreateProductHandler(
             product.ImageUrl,
             product.CategoryId);
 
-        await messageBus.PublishAsync(
-            ProductCreatedQueue,
-            JsonSerializer.SerializeToUtf8Bytes(integrationEvent),
-            cancellationToken);
+        await dbContext.Products.AddAsync(product, cancellationToken);
+        await eventPublisher.PublishAsync(integrationEvent, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return new ProductResponse(
             product.Id,

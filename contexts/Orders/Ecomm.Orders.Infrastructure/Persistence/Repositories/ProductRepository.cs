@@ -25,4 +25,9 @@ public class ProductRepository : IProductRepository
         await _dbContext.Products.AddAsync(product, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
+
+    public Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return _dbContext.Products.AnyAsync(product => product.Id == id, cancellationToken);
+    }
 }
