@@ -16,7 +16,7 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         services.AddDbContext<CatalogDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("DatabaseConnection")));
+            options.UseSqlServer(configuration.GetConnectionString("DatabaseConnection")));
         services.AddScoped<IMessageBusService, RabbitMqMessageBusService>();
 
         return services;
