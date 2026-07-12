@@ -1,23 +1,23 @@
 <Solution>
-  <Folder Name="/Source/" />
-  <Folder Name="/Source/Catalog/">
-    <Project Path="src/Catalog/Ecomm.Catalog.Api/Ecomm.Catalog.csproj" />
-    <Project Path="tests/Catalog/Ecomm.Catalog.UnitTests/Ecomm.Catalog.UnitTests.csproj" />
+  <Folder Name="/Contexts/" />
+  <Folder Name="/Contexts/Catalog/">
+    <Project Path="contexts/Catalog/src/Ecomm.Catalog/Ecomm.Catalog.csproj" />
+    <Project Path="contexts/Catalog/tests/Ecomm.Catalog.UnitTests/Ecomm.Catalog.UnitTests.csproj" />
   </Folder>
-  <Folder Name="/Source/Customers/">
-    <Project Path="src/Customers/Ecomm.Customers.Api/Ecomm.Customers.Api.csproj" />
+  <Folder Name="/Contexts/Customers/">
+    <Project Path="contexts/Customers/Ecomm.Customers.Api/Ecomm.Customers.Api.csproj" />
   </Folder>
-  <Folder Name="/Source/Orders/">
-    <Project Path="src/Orders/Ecomm.Orders.Api/Ecomm.Orders.Api.csproj" />
-    <Project Path="src/Orders/Ecomm.Orders.Application/Ecomm.Orders.Application.csproj" />
-    <Project Path="src/Orders/Ecomm.Orders.Domain/Ecomm.Orders.Domain.csproj" />
-    <Project Path="src/Orders/Ecomm.Orders.Infrastructure/Ecomm.Orders.Infrastructure.csproj" />
+  <Folder Name="/Contexts/Orders/">
+    <Project Path="contexts/Orders/Ecomm.Orders.Api/Ecomm.Orders.Api.csproj" />
+    <Project Path="contexts/Orders/Ecomm.Orders.Application/Ecomm.Orders.Application.csproj" />
+    <Project Path="contexts/Orders/Ecomm.Orders.Domain/Ecomm.Orders.Domain.csproj" />
+    <Project Path="contexts/Orders/Ecomm.Orders.Infrastructure/Ecomm.Orders.Infrastructure.csproj" />
   </Folder>
-  <Folder Name="/Source/Payments/">
-    <Project Path="src/Payments/Ecomm.Payments.Api/Ecomm.Payments.Api.csproj" />
-    <Project Path="src/Payments/Ecomm.Payments.Application/Ecomm.Payments.Application.csproj" />
-    <Project Path="src/Payments/Ecomm.Payments.Domain/Ecomm.Payments.Domain.csproj" />
-    <Project Path="src/Payments/Ecomm.Payments.Infrastructure/Ecomm.Payments.Infrastructure.csproj" />
+  <Folder Name="/Contexts/Payments/">
+    <Project Path="contexts/Payments/Ecomm.Payments.Api/Ecomm.Payments.Api.csproj" />
+    <Project Path="contexts/Payments/Ecomm.Payments.Application/Ecomm.Payments.Application.csproj" />
+    <Project Path="contexts/Payments/Ecomm.Payments.Domain/Ecomm.Payments.Domain.csproj" />
+    <Project Path="contexts/Payments/Ecomm.Payments.Infrastructure/Ecomm.Payments.Infrastructure.csproj" />
   </Folder>
   <Project Path="docker-compose.dcproj">
     <Build />
