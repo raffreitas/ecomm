@@ -1,4 +1,4 @@
-﻿namespace Ecomm.Catalog.Api.Models.ViewModels;
+﻿namespace Ecomm.Catalog.Models.ViewModels;
 
 public record ProductViewModel
 {

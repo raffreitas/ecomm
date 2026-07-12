@@ -1,4 +1,4 @@
-﻿namespace Ecomm.Catalog.Api.Models;
+﻿namespace Ecomm.Catalog.Models;
 
 public sealed class Category
 {

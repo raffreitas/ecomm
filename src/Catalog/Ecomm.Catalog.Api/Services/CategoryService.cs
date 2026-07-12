@@ -1,11 +1,11 @@
 ﻿using Ecomm.Catalog.Api.Exceptions.Base;
 using Ecomm.Catalog.Api.Models;
-using Ecomm.Catalog.Api.Models.InputModel;
-using Ecomm.Catalog.Api.Models.ViewModels;
-using Ecomm.Catalog.Api.Repositories;
-using Ecomm.Catalog.Api.Services.Contracts;
+using Ecomm.Catalog.Models.InputModel;
+using Ecomm.Catalog.Models.ViewModels;
+using Ecomm.Catalog.Repositories;
+using Ecomm.Catalog.Services.Contracts;
 
-namespace Ecomm.Catalog.Api.Services;
+namespace Ecomm.Catalog.Services;
 
 public class CategoryService(ICategoryRepository repository) : ICategoryService
 {

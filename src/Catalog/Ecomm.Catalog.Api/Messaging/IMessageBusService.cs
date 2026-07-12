@@ -1,4 +1,4 @@
-﻿namespace Ecomm.Catalog.Api.Messaging;
+﻿namespace Ecomm.Catalog.Messaging;
 
 public interface IMessageBusService
 {

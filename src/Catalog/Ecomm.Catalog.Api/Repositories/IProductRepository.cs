@@ -1,6 +1,6 @@
-﻿using Ecomm.Catalog.Api.Models;
+﻿using Ecomm.Catalog.Models;
 
-namespace Ecomm.Catalog.Api.Repositories;
+namespace Ecomm.Catalog.Repositories;
 
 public interface IProductRepository
 {

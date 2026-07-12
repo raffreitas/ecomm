@@ -1,7 +1,7 @@
 <Solution>
   <Folder Name="/Source/" />
   <Folder Name="/Source/Catalog/">
-    <Project Path="src/Catalog/Ecomm.Catalog.Api/Ecomm.Catalog.Api.csproj" />
+    <Project Path="src/Catalog/Ecomm.Catalog.Api/Ecomm.Catalog.csproj" />
   </Folder>
   <Folder Name="/Source/Customers/">
     <Project Path="src/Customers/Ecomm.Customers.Api/Ecomm.Customers.Api.csproj" />

@@ -1,7 +1,7 @@
-﻿using Ecomm.Catalog.Api.Models.InputModel;
-using Ecomm.Catalog.Api.Services.Contracts;
+﻿using Ecomm.Catalog.Models.InputModel;
+using Ecomm.Catalog.Services.Contracts;
 
-namespace Ecomm.Catalog.Api.Endpoints;
+namespace Ecomm.Catalog.Endpoints;
 
 public static class CategoryEndpoints
 {

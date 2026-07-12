@@ -1,9 +1,9 @@
-﻿using Ecomm.Catalog.Api.Models;
+﻿using Ecomm.Catalog.Models;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Ecomm.Catalog.Api.Persistence.Configurations;
+namespace Ecomm.Catalog.Persistence.Configurations;
 
 public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {

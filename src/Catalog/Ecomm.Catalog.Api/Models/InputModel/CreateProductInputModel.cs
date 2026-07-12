@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Ecomm.Catalog.Api.Models.InputModel;
+namespace Ecomm.Catalog.Models.InputModel;
 
 public record CreateProductInputModel
 {

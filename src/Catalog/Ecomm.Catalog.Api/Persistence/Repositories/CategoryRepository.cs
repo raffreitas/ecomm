@@ -1,9 +1,10 @@
-﻿using Ecomm.Catalog.Api.Models;
-using Ecomm.Catalog.Api.Repositories;
+﻿using Ecomm.Catalog.Models;
+using Ecomm.Catalog.Persistence;
+using Ecomm.Catalog.Repositories;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Ecomm.Catalog.Api.Persistence.Repositories;
+namespace Ecomm.Catalog.Persistence.Repositories;
 
 public class CategoryRepository(CatalogDbContext dbContext) : ICategoryRepository
 {

@@ -1,14 +1,14 @@
-﻿using Ecomm.Catalog.Api.Endpoints;
-using Ecomm.Catalog.Api.Messaging;
-using Ecomm.Catalog.Api.Persistence;
-using Ecomm.Catalog.Api.Persistence.Repositories;
-using Ecomm.Catalog.Api.Repositories;
-using Ecomm.Catalog.Api.Services;
-using Ecomm.Catalog.Api.Services.Contracts;
+﻿using Ecomm.Catalog.Endpoints;
+using Ecomm.Catalog.Messaging;
+using Ecomm.Catalog.Persistence;
+using Ecomm.Catalog.Persistence.Repositories;
+using Ecomm.Catalog.Repositories;
+using Ecomm.Catalog.Services;
+using Ecomm.Catalog.Services.Contracts;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Ecomm.Catalog.Api.Extensions;
+namespace Ecomm.Catalog.Extensions;
 
 public static class DependencyInjectionExtension
 {

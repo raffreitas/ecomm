@@ -1,7 +1,7 @@
-﻿using Ecomm.Catalog.Api.Models.InputModel;
-using Ecomm.Catalog.Api.Models.ViewModels;
+﻿using Ecomm.Catalog.Models.InputModel;
+using Ecomm.Catalog.Models.ViewModels;
 
-namespace Ecomm.Catalog.Api.Services.Contracts;
+namespace Ecomm.Catalog.Services.Contracts;
 
 public interface IProductService
 {

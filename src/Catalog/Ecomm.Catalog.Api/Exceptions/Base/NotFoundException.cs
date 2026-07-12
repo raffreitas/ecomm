@@ -1,4 +1,4 @@
-﻿namespace Ecomm.Catalog.Api.Exceptions.Base;
+﻿namespace Ecomm.Catalog.Exceptions.Base;
 
 public class NotFoundException : Exception
 {

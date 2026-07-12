@@ -1,6 +1,6 @@
 ﻿using RabbitMQ.Client;
 
-namespace Ecomm.Catalog.Api.Messaging;
+namespace Ecomm.Catalog.Messaging;
 
 public class RabbitMqMessageBusService : IMessageBusService
 {

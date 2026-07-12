@@ -1,8 +1,8 @@
-﻿using Ecomm.Catalog.Api.Models;
+﻿using Ecomm.Catalog.Models;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Ecomm.Catalog.Api.Persistence;
+namespace Ecomm.Catalog.Persistence;
 
 public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : DbContext(options)
 {

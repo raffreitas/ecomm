@@ -1,5 +1,5 @@
-using Ecomm.Catalog.Api.Exceptions;
-using Ecomm.Catalog.Api.Extensions;
+using Ecomm.Catalog.Exceptions;
+using Ecomm.Catalog.Extensions;
 
 using Scalar.AspNetCore;
 

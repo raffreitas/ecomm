@@ -1,9 +1,9 @@
-﻿using Ecomm.Catalog.Api.Exceptions.Base;
+﻿using Ecomm.Catalog.Exceptions.Base;
 
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Ecomm.Catalog.Api.Exceptions;
+namespace Ecomm.Catalog.Exceptions;
 
 public class ApiExceptionHandler : IExceptionHandler
 {
