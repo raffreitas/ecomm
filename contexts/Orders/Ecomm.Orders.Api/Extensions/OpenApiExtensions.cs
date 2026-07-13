@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 using Scalar.AspNetCore;
 
@@ -31,9 +31,9 @@ public static class OpenApiExtensions
             var authSchemes = await authenticationSchemeProvider.GetAllSchemesAsync();
             if (authSchemes.Any(scheme => scheme.Name == JwtBearerDefaults.AuthenticationScheme))
             {
-                var requirements = new Dictionary<string, OpenApiSecurityScheme>
+                var requirements = new Dictionary<string, IOpenApiSecurityScheme>
                 {
-                    [JwtBearerDefaults.AuthenticationScheme] = new()
+                    [JwtBearerDefaults.AuthenticationScheme] = new OpenApiSecurityScheme
                     {
                         Type = SecuritySchemeType.Http,
                         Scheme = JwtBearerDefaults.AuthenticationScheme.ToLower(),
