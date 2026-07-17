@@ -9,7 +9,7 @@ public sealed class EventResolver : IEventResolver
     {
         if (typeof(TEvent) == typeof(ProductCreatedIntegrationEvent))
         {
-            return new EventMetadata("product.created", "product.created", 1);
+            return new EventMetadata("catalog.product-created.v1", "catalog-events", 1);
         }
 
         throw new InvalidOperationException($"Integration event '{typeof(TEvent).Name}' is not registered.");

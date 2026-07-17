@@ -1,7 +1,6 @@
 ﻿using Ecomm.Orders.Application.Abstractions;
 using Ecomm.Orders.Domain.DTOs;
 using Ecomm.Orders.Domain.Entities;
-using Ecomm.Orders.Domain.Repositories;
 
 using FluentValidation;
 

@@ -7,7 +7,7 @@ public class CreateCustomerRequestValidation : AbstractValidator<CreateCustomerR
     public CreateCustomerRequestValidation()
     {
         RuleFor(x => x.Name).NotEmpty();
-        RuleFor(x => x.Email).NotEmpty();
         RuleFor(x => x.Email).NotEmpty().EmailAddress();
+        RuleFor(x => x.Document).NotEmpty().MinimumLength(5).MaximumLength(20);
     }
 }

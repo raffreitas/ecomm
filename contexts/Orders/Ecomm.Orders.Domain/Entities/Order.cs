@@ -13,7 +13,7 @@ public sealed class Order : Entity
     public DateTime CreatedAt { get; private init; } = DateTime.UtcNow;
     public IList<OrderItem> Items { get; private set; } = [];
 
-    public Customer Customer { get; private set; }
+    public Customer Customer { get; private set; } = null!;
 
     private Order(Guid customerId)
     {
@@ -25,9 +25,24 @@ public sealed class Order : Entity
     {
         ArgumentNullException.ThrowIfNull(createOrderDto);
 
+        if (createOrderDto.Customer is null)
+            throw new ArgumentException("Customer is required.", nameof(createOrderDto));
+
+        if (string.IsNullOrWhiteSpace(createOrderDto.CardHash))
+            throw new ArgumentException("Card hash is required.", nameof(createOrderDto));
+
+        var items = createOrderDto.Items?.ToArray()
+            ?? throw new ArgumentException("Items are required.", nameof(createOrderDto));
+
+        if (items.Length == 0)
+            throw new ArgumentException("An order must contain at least one item.", nameof(createOrderDto));
+
+        if (items.Select(item => item.ProductId).Distinct().Count() != items.Length)
+            throw new ArgumentException("An order cannot contain the same product more than once.", nameof(createOrderDto));
+
         var order = new Order(createOrderDto.Customer.Id);
 
-        foreach (var item in createOrderDto.Items)
+        foreach (var item in items)
         {
             order.AddItem(new OrderItem(item.Quantity, item.UnitPrice, item.ProductId, order.Id));
         }
@@ -57,11 +72,19 @@ public sealed class Order : Entity
 
     public void MarkAsPaid()
     {
+        EnsurePending();
         Status = OrderStatus.Paid;
     }
 
     public void MarkAsFailed()
     {
+        EnsurePending();
         Status = OrderStatus.Failed;
+    }
+
+    private void EnsurePending()
+    {
+        if (Status != OrderStatus.Pending)
+            throw new InvalidOperationException($"Order {Id} cannot transition from {Status}.");
     }
 }

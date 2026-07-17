@@ -14,11 +14,14 @@ public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.OrderId).IsRequired();
+        builder.HasIndex(x => x.OrderId).IsUnique();
         builder.Property(x => x.Total).IsRequired();
         builder.Property(x => x.CustomerName).IsRequired();
         builder.Property(x => x.CustomerDocument).IsRequired();
         builder.Property(x => x.Status).IsRequired()
             .HasConversion(v => v.ToString(), v => Enum.Parse<PaymentStatus>(v));
+        builder.Property(x => x.ExternalPaymentId).HasMaxLength(200);
+        builder.Property(x => x.RejectionReason).HasMaxLength(1000);
 
         builder.Property(x => x.CreatedAt).IsRequired();
     }

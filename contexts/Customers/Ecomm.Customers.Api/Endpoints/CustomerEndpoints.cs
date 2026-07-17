@@ -1,5 +1,5 @@
-﻿using Ecomm.Customers.Api.Requests;
-using Ecomm.Customers.Api.Services;
+using Ecomm.Customers.Api.Features.CreateCustomer;
+using Ecomm.Customers.Api.Requests;
 
 namespace Ecomm.Customers.Api.Endpoints;
 
@@ -13,10 +13,10 @@ public static class CustomerEndpoints
 
     private static async Task<IResult> CreateCustomer(
         CreateCustomerRequest customerRequest,
-        ICustomerService customerService,
+        CreateCustomerHandler handler,
         CancellationToken cancellationToken)
     {
-        await customerService.CreateAsync(customerRequest, cancellationToken);
-        return Results.Created();
+        var id = await handler.ExecuteAsync(customerRequest, cancellationToken);
+        return Results.Created($"/api/customers/{id}", new { id });
     }
 }

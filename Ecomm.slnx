@@ -1,4 +1,9 @@
 <Solution>
+  <Project Path="Ecomm.AppHost/Ecomm.AppHost.csproj" />
+  <Folder Name="/BuildingBlocks/">
+    <Project Path="building-blocks/Ecomm.Messaging/Ecomm.Messaging.csproj" />
+    <Project Path="building-blocks/Ecomm.ServiceDefaults/Ecomm.ServiceDefaults.csproj" />
+  </Folder>
   <Folder Name="/Contexts/" />
   <Folder Name="/Contexts/Catalog/">
     <Project Path="contexts/Catalog/src/Ecomm.Catalog/Ecomm.Catalog.csproj" />
@@ -11,14 +16,28 @@
     <Project Path="contexts/Orders/Ecomm.Orders.Application/Ecomm.Orders.Application.csproj" />
     <Project Path="contexts/Orders/Ecomm.Orders.Domain/Ecomm.Orders.Domain.csproj" />
     <Project Path="contexts/Orders/Ecomm.Orders.Infrastructure/Ecomm.Orders.Infrastructure.csproj" />
+    <Project Path="contexts/Orders/Ecomm.Orders.Worker/Ecomm.Orders.Worker.csproj" />
   </Folder>
   <Folder Name="/Contexts/Payments/">
     <Project Path="contexts/Payments/Ecomm.Payments.Api/Ecomm.Payments.Api.csproj" />
     <Project Path="contexts/Payments/Ecomm.Payments.Application/Ecomm.Payments.Application.csproj" />
     <Project Path="contexts/Payments/Ecomm.Payments.Domain/Ecomm.Payments.Domain.csproj" />
     <Project Path="contexts/Payments/Ecomm.Payments.Infrastructure/Ecomm.Payments.Infrastructure.csproj" />
+    <Project Path="contexts/Payments/Ecomm.Payments.Worker/Ecomm.Payments.Worker.csproj" />
   </Folder>
-  <Project Path="docker-compose.dcproj">
-    <Build />
-  </Project>
+  <Folder Name="/Tests/Orders/">
+    <Project Path="tests/Orders/Ecomm.Orders.Domain.Tests/Ecomm.Orders.Domain.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Tests/Catalog/">
+    <Project Path="tests/Catalog/Ecomm.Catalog.Domain.Tests/Ecomm.Catalog.Domain.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Tests/Customers/">
+    <Project Path="tests/Customers/Ecomm.Customers.Domain.Tests/Ecomm.Customers.Domain.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Tests/BuildingBlocks/">
+    <Project Path="tests/BuildingBlocks/Ecomm.Messaging.Tests/Ecomm.Messaging.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Tests/Payments/">
+    <Project Path="tests/Payments/Ecomm.Payments.Domain.Tests/Ecomm.Payments.Domain.Tests.csproj" />
+  </Folder>
 </Solution>

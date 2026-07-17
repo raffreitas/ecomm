@@ -7,6 +7,8 @@ public sealed class OutboxMessage
     public int Version { get; set; }
     public string Destination { get; set; } = string.Empty;
     public string Payload { get; set; } = string.Empty;
+    public string? CorrelationId { get; set; }
+    public string? CausationId { get; set; }
     public DateTimeOffset OccurredAtUtc { get; set; }
     public int Attempts { get; set; }
     public DateTimeOffset NextAttemptAtUtc { get; set; }

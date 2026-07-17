@@ -1,6 +1,7 @@
 using Ecomm.Catalog.Common.Messaging;
 using Ecomm.Catalog.Infrastructure.Messaging;
 using Ecomm.Catalog.Infrastructure.Persistence;
+using Ecomm.Messaging;
 
 using FluentValidation;
 
@@ -24,12 +25,14 @@ public static class DependencyInjection
     {
         services.AddDbContext<CatalogDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DatabaseConnection")));
-        services.Configure<OutboxOptions>(configuration.GetSection(OutboxOptions.SectionName));
+        services.Configure<Ecomm.Messaging.OutboxOptions>(
+            configuration.GetSection(Ecomm.Messaging.OutboxOptions.SectionName));
         services.AddSingleton(TimeProvider.System);
         services.AddSingleton<IEventResolver, EventResolver>();
         services.AddScoped<IEventPublisher, OutboxEventPublisher>();
-        services.AddSingleton<IEventTransport, RabbitMqEventTransport>();
-        services.AddHostedService<OutboxDispatcher>();
+        services.AddServiceBusTransport(configuration);
+        services.AddSingleton<IOutboxStore, CatalogOutboxStore>();
+        services.AddHostedService<Ecomm.Messaging.OutboxDispatcher>();
 
         return services;
     }

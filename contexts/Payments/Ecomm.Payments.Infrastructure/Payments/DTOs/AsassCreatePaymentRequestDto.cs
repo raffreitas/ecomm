@@ -8,4 +8,5 @@ public record AsassCreatePaymentRequestDto
     [JsonPropertyName("billingType")] public string PaymentMethod { get; set; } = string.Empty;
     [JsonPropertyName("value")] public decimal Amount { get; set; }
     [JsonPropertyName("dueDate")] public string DueDate { get; set; } = string.Empty;
+    [JsonPropertyName("externalReference")] public string ExternalReference { get; set; } = string.Empty;
 }

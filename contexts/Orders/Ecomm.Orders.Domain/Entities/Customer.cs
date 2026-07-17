@@ -18,6 +18,14 @@ public class Customer : Entity
         Document = document;
     }
 
+    public static Customer CreateSnapshot(Guid id, string name, string document)
+    {
+        if (id == Guid.Empty) throw new ArgumentException("Customer id is required.", nameof(id));
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Customer name is required.", nameof(name));
+        if (string.IsNullOrWhiteSpace(document)) throw new ArgumentException("Customer document is required.", nameof(document));
+        return new Customer(id, name.Trim(), document.Trim());
+    }
+
     [JsonConstructor]
     internal Customer(Guid id, string name, string document)
     {

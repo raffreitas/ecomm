@@ -1,10 +1,8 @@
-﻿using System.Reflection;
+using System.Reflection;
 
-using Ecomm.Customers.Api.Messaging;
+using Ecomm.Customers.Api.Features.CreateCustomer;
 using Ecomm.Customers.Api.Persistence;
-using Ecomm.Customers.Api.Persistence.Repositories;
-using Ecomm.Customers.Api.Repositories;
-using Ecomm.Customers.Api.Services;
+using Ecomm.Messaging;
 
 using FluentValidation;
 
@@ -18,6 +16,11 @@ public static class Configurations
     {
         services.AddDbContext<CustomersDbContext>(option =>
             option.UseNpgsql(configuration.GetConnectionString("DatabaseConnection")));
+        services.AddSingleton(TimeProvider.System);
+        services.Configure<OutboxOptions>(configuration.GetSection(OutboxOptions.SectionName));
+        services.AddServiceBusTransport(configuration);
+        services.AddSingleton<IOutboxStore, EfOutboxStore<CustomersDbContext>>();
+        services.AddHostedService<OutboxDispatcher>();
         return services;
     }
 
@@ -29,20 +32,14 @@ public static class Configurations
 
     public static IServiceCollection AddDependencyInjection(this IServiceCollection services)
     {
-        services.AddScoped<ICustomerRepository, CustomerRepository>();
-
-        services.AddScoped<IMessageBusService, RabbitMqMessageBusService>();
-
-        services.AddScoped<ICustomerService, CustomerService>();
-
+        services.AddScoped<CreateCustomerHandler>();
         return services;
     }
 
     public static void ApplyMigrations(this IApplicationBuilder app)
     {
         using var serviceScope = app.ApplicationServices.CreateScope();
-        var serviceProvider = serviceScope.ServiceProvider;
-        var dbContext = serviceProvider.GetRequiredService<CustomersDbContext>();
+        var dbContext = serviceScope.ServiceProvider.GetRequiredService<CustomersDbContext>();
         dbContext.Database.Migrate();
     }
 }

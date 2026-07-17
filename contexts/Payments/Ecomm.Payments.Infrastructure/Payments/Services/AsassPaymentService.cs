@@ -1,14 +1,11 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
 
-using Ecomm.Payments.Domain.DTOs;
+using Ecomm.Payments.Application.Abstractions;
 using Ecomm.Payments.Domain.Entities;
 using Ecomm.Payments.Domain.Enums;
-using Ecomm.Payments.Domain.Services;
 using Ecomm.Payments.Infrastructure.Payments.DTOs;
 using Ecomm.Payments.Infrastructure.Payments.Settings;
-
-using Microsoft.Extensions.Options;
 
 namespace Ecomm.Payments.Infrastructure.Payments.Services;
 
@@ -16,23 +13,20 @@ public class AsassPaymentService : IPaymentService
 {
     private readonly HttpClient _httpClient;
 
-    public AsassPaymentService(IHttpClientFactory httpClientFactory, IOptions<PaymentSettings> options)
+    public AsassPaymentService(HttpClient httpClient)
     {
-        var paymentSettings = options.Value;
-
-        _httpClient = httpClientFactory.CreateClient();
-        _httpClient.BaseAddress = new Uri(paymentSettings.BaseUrl);
-        _httpClient.DefaultRequestHeaders.Add("access_token", paymentSettings.ApiKey);
-        _httpClient.DefaultRequestHeaders.Add("User-Agent", "Ecomm.Payments");
+        _httpClient = httpClient;
     }
 
-    public async Task<ProcessPaymentResponseDto> ProcessPaymentAsync(
+    public async Task<ProcessPaymentResponse> ProcessPaymentAsync(
         Payment payment,
         CancellationToken cancellationToken = default)
     {
         var createCustomerDto = new AsassCreateCustomerRequestDto
         {
-            Name = payment.CustomerName, Document = payment.CustomerDocument
+            Name = payment.CustomerName,
+            Document = payment.CustomerDocument,
+            ExternalReference = payment.OrderId.ToString(),
         };
         var asassCustomer = await CreateCustomerAsync(createCustomerDto, cancellationToken);
 
@@ -41,7 +35,8 @@ public class AsassPaymentService : IPaymentService
             Amount = payment.Total,
             CustomerId = asassCustomer.Id,
             DueDate = DateTime.Now.ToString("yyyy-MM-dd"),
-            PaymentMethod = "CREDIT_CARD"
+            PaymentMethod = "CREDIT_CARD",
+            ExternalReference = payment.OrderId.ToString(),
         };
         var createPaymentResponse = await CreatePaymentAsync(createPaymentRequest, cancellationToken);
 
@@ -51,7 +46,7 @@ public class AsassPaymentService : IPaymentService
             "PENDING" => PaymentStatus.Pending,
             _ => PaymentStatus.Rejected
         };
-        return new ProcessPaymentResponseDto(createPaymentResponse.TransactionId, paymentStatus);
+        return new ProcessPaymentResponse(createPaymentResponse.TransactionId, paymentStatus);
     }
 
     private async Task<AsassCreatePaymentResponseDto> CreatePaymentAsync(

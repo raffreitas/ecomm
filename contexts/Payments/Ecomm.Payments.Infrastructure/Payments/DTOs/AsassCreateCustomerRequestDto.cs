@@ -6,4 +6,5 @@ public record AsassCreateCustomerRequestDto
 {
     [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
     [JsonPropertyName("cpfCnpj")] public string Document { get; set; } = string.Empty;
+    [JsonPropertyName("externalReference")] public string ExternalReference { get; set; } = string.Empty;
 };

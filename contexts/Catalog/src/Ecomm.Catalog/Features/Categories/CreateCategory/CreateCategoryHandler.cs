@@ -14,7 +14,7 @@ public sealed class CreateCategoryHandler(IValidator<Request> validator, Catalog
     {
         await validator.ValidateAndThrowAsync(request, cancellationToken);
 
-        var category = new Category { Name = request.Name };
+        var category = Category.Create(request.Name);
         await dbContext.Categories.AddAsync(category, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 

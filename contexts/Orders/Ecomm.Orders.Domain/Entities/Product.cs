@@ -18,6 +18,14 @@ public sealed class Product : Entity
         Price = price;
     }
 
+    public static Product CreateSnapshot(Guid id, string name, decimal price)
+    {
+        if (id == Guid.Empty) throw new ArgumentException("Product id is required.", nameof(id));
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Product name is required.", nameof(name));
+        if (price <= 0) throw new ArgumentOutOfRangeException(nameof(price));
+        return new Product(id, name.Trim(), price);
+    }
+
     [JsonConstructor]
     internal Product(Guid id, string name, decimal price)
     {

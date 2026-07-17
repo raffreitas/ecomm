@@ -7,15 +7,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.9" />
-      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.9" />
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
-      <PackageReference Include="RabbitMQ.Client" Version="7.2.1" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Ecomm.Orders.Application\Ecomm.Orders.Application.csproj" />
-      <ProjectReference Include="..\Ecomm.Orders.Domain\Ecomm.Orders.Domain.csproj" />
+      <ProjectReference Include="..\..\..\building-blocks\Ecomm.Messaging\Ecomm.Messaging.csproj" />
     </ItemGroup>
 
 </Project>

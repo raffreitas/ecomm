@@ -1,6 +1,6 @@
 ﻿
 using Ecomm.Orders.Domain.Entities;
-using Ecomm.Orders.Domain.Repositories;
+using Ecomm.Orders.Application.Abstractions;
 
 using Microsoft.EntityFrameworkCore;
 

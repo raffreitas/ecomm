@@ -1,137 +1,124 @@
+name: ecomm
+
+x-servicebus-environment: &servicebus-environment
+  Messaging__ServiceBus__ConnectionString: Endpoint=sb://servicebus-emulator;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;
+
 services:
-  rabbitmq:
-    image: rabbitmq:4-management
-    container_name: rabbitmq
-    ports:
-      - 15672:15672
-      - 5672:5672
+  servicebus-sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: admin
-    healthcheck:
-      test: rabbitmq-diagnostics -q ping
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 10s
-  ##########################
-  # Catalog
-  ##########################
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: ChangeIt123!
+    networks: [ecomm]
+
+  servicebus-emulator:
+    image: mcr.microsoft.com/azure-messaging/servicebus-emulator:latest
+    volumes:
+      - ./infra/servicebus/Config.json:/ServiceBus_Emulator/ConfigFiles/Config.json:ro
+    ports:
+      - "5672:5672"
+      - "5300:5300"
+    environment:
+      SQL_SERVER: servicebus-sql
+      MSSQL_SA_PASSWORD: ChangeIt123!
+      ACCEPT_EULA: Y
+      EMULATOR_HTTP_PORT: 5300
+    depends_on: [servicebus-sql]
+    networks: [ecomm]
+
+  catalog-database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports: ["1433:1433"]
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: ChangeIt123!
+    networks: [ecomm]
+
+  customers-database:
+    image: postgres:17-alpine
+    ports: ["5435:5432"]
+    environment: { POSTGRES_DB: customers, POSTGRES_USER: postgres, POSTGRES_PASSWORD: postgres }
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U postgres -d customers"], interval: 5s, timeout: 3s, retries: 10 }
+    networks: [ecomm]
+
+  orders-database:
+    image: postgres:17-alpine
+    ports: ["5433:5432"]
+    environment: { POSTGRES_DB: orders, POSTGRES_USER: postgres, POSTGRES_PASSWORD: postgres }
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U postgres -d orders"], interval: 5s, timeout: 3s, retries: 10 }
+    networks: [ecomm]
+
+  payments-database:
+    image: postgres:17-alpine
+    ports: ["5434:5432"]
+    environment: { POSTGRES_DB: payments, POSTGRES_USER: postgres, POSTGRES_PASSWORD: postgres }
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U postgres -d payments"], interval: 5s, timeout: 3s, retries: 10 }
+    networks: [ecomm]
+
   ecomm.catalog.api:
-    image: ${DOCKER_REGISTRY-}ecommcatalogapi
-    build:
-      context: .
-      dockerfile: src/Catalog/Ecomm.Catalog.Api/Dockerfile
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      ecomm.catalog.database:
-        condition: service_healthy
-
-  ecomm.catalog.database:
-    image: bitnami/postgresql
-    container_name: catalog.database
-    restart: always
-    ports:
-      - 5432:5432
+    build: { context: ., dockerfile: contexts/Catalog/src/Ecomm.Catalog/Dockerfile }
+    ports: ["8080:8080"]
     environment:
-      POSTGRESQL_DATABASE: catalog
-      POSTGRESQL_PASSWORD: postgres
-      POSTGRESQL_USERNAME: postgres
-      POSTGRESQL_TIMEZONE: America/Sao_Paulo
-    healthcheck:
-      test: pg_isready -U postgres -d catalog
-      interval: 10s
-      timeout: 3s
-      retries: 3
-  ##########################
-  # Customers
-  ##########################
+      <<: *servicebus-environment
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: 8080
+      ConnectionStrings__DatabaseConnection: Server=catalog-database;Database=catalog;User Id=sa;Password=ChangeIt123!;TrustServerCertificate=True
+    depends_on: [catalog-database, servicebus-emulator]
+    networks: [ecomm]
+
   ecomm.customers.api:
-    image: ${DOCKER_REGISTRY-}ecommcustomersapi
-    build:
-      context: .
-      dockerfile: src/Customers/Ecomm.Customers.Api/Dockerfile
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      ecomm.customers.database:
-        condition: service_healthy
-
-  ecomm.customers.database:
-    image: bitnami/postgresql
-    container_name: customers.database
-    restart: always
-    ports:
-      - 5435:5432
+    build: { context: ., dockerfile: contexts/Customers/Ecomm.Customers.Api/Dockerfile }
+    ports: ["8081:8080"]
     environment:
-      POSTGRESQL_DATABASE: customers
-      POSTGRESQL_PASSWORD: postgres
-      POSTGRESQL_USERNAME: postgres
-      POSTGRESQL_TIMEZONE: America/Sao_Paulo
-    healthcheck:
-      test: pg_isready -U postgres -d customers
-      interval: 10s
-      timeout: 3s
-      retries: 3
-  ##########################
-  # Orders
-  ##########################
+      <<: *servicebus-environment
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: 8080
+      ConnectionStrings__DatabaseConnection: Host=customers-database;Username=postgres;Password=postgres;Database=customers
+    depends_on: [customers-database, servicebus-emulator]
+    networks: [ecomm]
+
   ecomm.orders.api:
-    image: ${DOCKER_REGISTRY-}ecommordersapi
-    build:
-      context: .
-      dockerfile: src/Orders/Ecomm.Orders.Api/Dockerfile
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      ecomm.orders.database:
-        condition: service_healthy
-
-  ecomm.orders.database:
-    image: bitnami/postgresql
-    container_name: orders.database
-    restart: always
-    ports:
-      - 5433:5432
+    build: { context: ., dockerfile: contexts/Orders/Ecomm.Orders.Api/Dockerfile }
+    ports: ["8082:8080"]
     environment:
-      POSTGRESQL_DATABASE: orders
-      POSTGRESQL_PASSWORD: postgres
-      POSTGRESQL_USERNAME: postgres
-      POSTGRESQL_TIMEZONE: America/Sao_Paulo
-    healthcheck:
-      test: pg_isready -U postgres -d orders
-      interval: 10s
-      timeout: 3s
-      retries: 3
-  ##########################
-  # Payments
-  ##########################
+      <<: *servicebus-environment
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: 8080
+      ConnectionStrings__DatabaseConnection: Host=orders-database;Username=postgres;Password=postgres;Database=orders
+      JWT__SecretKey: 78fee4e6-e092-4f30-91a5-595f8eb3047d
+    depends_on: [orders-database, servicebus-emulator]
+    networks: [ecomm]
+
+  ecomm.orders.worker:
+    build: { context: ., dockerfile: contexts/Orders/Ecomm.Orders.Worker/Dockerfile }
+    environment:
+      <<: *servicebus-environment
+      ConnectionStrings__DatabaseConnection: Host=orders-database;Username=postgres;Password=postgres;Database=orders
+    depends_on: [orders-database, servicebus-emulator]
+    networks: [ecomm]
+
   ecomm.payments.api:
-    image: ${DOCKER_REGISTRY-}ecommpaymentsapi
-    build:
-      context: .
-      dockerfile: src/Payments/Ecomm.Payments.Api/Dockerfile
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      ecomm.payments.database:
-        condition: service_healthy
-
-  ecomm.payments.database:
-    image: bitnami/postgresql
-    container_name: payments.database
-    restart: always
-    ports:
-      - 5434:5432
+    build: { context: ., dockerfile: contexts/Payments/Ecomm.Payments.Api/Dockerfile }
+    ports: ["8083:8080"]
     environment:
-      POSTGRESQL_DATABASE: payments
-      POSTGRESQL_PASSWORD: postgres
-      POSTGRESQL_USERNAME: postgres
-      POSTGRESQL_TIMEZONE: America/Sao_Paulo
-    healthcheck:
-      test: pg_isready -U postgres -d payments
-      interval: 10s
-      timeout: 3s
-      retries: 3
+      <<: *servicebus-environment
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: 8080
+      ConnectionStrings__DatabaseConnection: Host=payments-database;Username=postgres;Password=postgres;Database=payments
+      Payments__BaseUrl: https://api-sandbox.asaas.com/
+      Payments__ApiKey: ${PAYMENTS_API_KEY:-}
+    depends_on: [payments-database, servicebus-emulator]
+    networks: [ecomm]
 
+  ecomm.payments.worker:
+    build: { context: ., dockerfile: contexts/Payments/Ecomm.Payments.Worker/Dockerfile }
+    environment:
+      <<: *servicebus-environment
+      ConnectionStrings__DatabaseConnection: Host=payments-database;Username=postgres;Password=postgres;Database=payments
+      Payments__BaseUrl: https://api-sandbox.asaas.com/
+      Payments__ApiKey: ${PAYMENTS_API_KEY:-}
+    depends_on: [payments-database, servicebus-emulator]
+    networks: [ecomm]
+
+networks:
+  ecomm:

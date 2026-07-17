@@ -1,114 +1,77 @@
+# Ecomm
 
-# 🛒 Ecomm 
+Laboratório de e-commerce em .NET 10 com quatro bounded contexts: Catalog, Customers, Orders e Payments.
 
-Este é um projeto de demonstração de um sistema de ecommerce baseado em microserviços. O objetivo é explorar práticas modernas de desenvolvimento backend, como uso de **RabbitMQ** para comunicação assíncrona, e design modular com **DDD (Domain-Driven Design)**, **CQRS (Command Query Responsibility Segregation)** e **Clean Architecture**.
+## Arquitetura
 
-## 🛠️ Tecnologias Utilizadas
+- Catalog e Customers usam vertical slices em um único projeto por serviço.
+- Orders e Payments mantêm Domain, Application, Infrastructure e API; seus consumers executam em workers separados.
+- Eventos de domínio permanecem internos. Eventos de integração usam um envelope versionado com `Id`, `Type`, `Version`, `OccurredAtUtc`, `CorrelationId`, `CausationId` e `Data`.
+- Cada publicação é gravada em `OutboxMessages` junto com a mudança de negócio. Consumers registram `(MessageId, ConsumerName)` em `InboxMessages` na mesma transação do efeito local.
+- Azure Service Bus usa peek-lock, conclusão manual, retry por abandono e DLQ para mensagens inválidas.
 
-- **.NET 9**
-- **ASP.NET Core**
-- **Entity Framework Core**  
-- **RabbitMQ**
-- **PostgreSQL**
-- **Docker** e **Docker Compose**  
-- **Scalar** para documentação de APIs
-- **Asaas** para processamento de pagamentos
+### Eventos e topologia
 
----
+| Evento | Tópico | Subscription consumidora |
+|---|---|---|
+| `catalog.product-created.v1` | `catalog-events` | `orders-product-projection` |
+| `customers.customer-created.v1` | `customers-events` | `orders-customer-projection` |
+| `orders.order-created.v1` | `orders-events` | `payments-order-processing` |
+| `payments.payment-approved.v1` / `payments.payment-rejected.v1` | `payments-events` | `orders-payment-status` |
 
-## 🏰 Arquitetura do Projeto
+## Execução local
 
-Este projeto segue os princípios de **DDD**, **CQRS** e **Clean Architecture**, garantindo que as regras de negócio fiquem isoladas de detalhes de implementação, como frameworks e banco de dados.
+Pré-requisitos: Docker Desktop e .NET SDK 10.
 
-### Camadas Principais
+### Aspire
 
-1. **Domain**
-   - Contém entidades, value objects, domain events e interfaces dos repositórios.  
-   - Representa as regras de negócio centrais.
+```powershell
+dotnet user-secrets --project Ecomm.AppHost/Ecomm.AppHost.csproj set "Parameters:asaas-api-key" "sua-chave-sandbox"
+dotnet run --project Ecomm.AppHost/Ecomm.AppHost.csproj
+```
 
-2. **Application**
-   - Contém os casos de uso (application services) que orquestram as regras de negócio.
+O AppHost injeta a chave do Asaas como parâmetro secreto e inicia os bancos, o emulador do Service Bus, quatro APIs e dois workers.
 
-3. **Infrastructure**
-   - Implementação de repositórios, integrações externas e configurações de banco de dados.
+### Docker Compose
 
-4. **Api**
-   - APIs RESTful para comunicação com os clientes.
+Defina a chave sandbox do Asaas e suba o ambiente:
 
-### CQRS
+```powershell
+$env:PAYMENTS_API_KEY = "sua-chave-sandbox"
+docker compose up --build
+```
 
-A separação entre comandos e consultas foi implementada para melhorar a escalabilidade e a clareza do código. 
-- **Comandos**: Responsáveis por alterar o estado do sistema.  
-- **Consultas**: Responsáveis por buscar dados sem alterar o estado.
+O emulador é somente para desenvolvimento/testes. Sua configuração declarativa está em `infra/servicebus/Config.json`.
 
-### Microserviços
+| Serviço | URL |
+|---|---|
+| Catalog | http://localhost:8080/scalar/v1 |
+| Customers | http://localhost:8081/scalar/v1 |
+| Orders | http://localhost:8082/scalar/v1 |
+| Payments | http://localhost:8083/scalar/v1 |
+| Service Bus health | http://localhost:5300/health |
 
-O sistema é composto pelos seguintes microserviços:
+Todas as APIs expõem `/health` e `/ready`.
 
-1. **Catalog**  
-   - Gerenciamento de produtos e categorias (CRUD).
-   - Exposição de APIs REST.
-   - Publica mensagens no RabbitMQ quando um produto é criado.
+## Build e testes
 
-2. **Orders**  
-   - Criação e gerenciamento de pedidos.
-   - Publica mensagens no RabbitMQ para processar o pagamento de um pedido.
-   - Consome mensagens do RabbitMQ para atualizar sua base de dados local tanto de clientes quanto de produtos.
+As versões NuGet são centralizadas em `Directory.Packages.props`.
 
-3. **Payments**  
-   - Processamento de pagamentos.
-   - Consome mensagens do RabbitMQ e responde ao serviço de pedidos.
+```powershell
+dotnet build Ecomm.slnx -m:1
+dotnet test Ecomm.slnx -m:1
+```
 
-4. **Customers**  
-   - Gerenciamento de informações de clientes.
-   - Publica mensgens no RabbitMQ quando um cliente é criado.
+Se o build agregado ficar preso no compilador local, execute os projetos individualmente com `-m:1`.
 
-### ️ Diagrama da Arquitetura
+## Persistência
 
-Este diagrama ilustra a arquitetura geral do sistema, mostrando a interação entre os microserviços e o fluxo de mensagens.
+Catalog usa SQL Server. Customers, Orders e Payments ainda usam PostgreSQL no ambiente local atual; a migração coordenada para quatro bancos Azure SQL isolados faz parte da etapa cloud e requer recriar/validar as migrations para o provider SQL Server antes do cutover.
 
-![Diagrama da Arquitetura](./.github/images/diagram.png)
+Migrations novas incluem outbox/inbox, correlação, índice único de pagamento por `OrderId`, ID externo e motivo de rejeição.
 
----
+## Azure
 
-## 🔧 Configuração e Execução
+O destino aprovado é Azure Container Apps, ACR, Service Bus Standard, Key Vault, Log Analytics, Application Insights e um servidor lógico Azure SQL com quatro bancos. O plano de preparação está em `.azure/deployment-plan.md`.
 
-### Pré-requisitos
-
-- **Docker** e **Docker Compose** instalados.
-
-### Passos para executar
-
-1. Clone este repositório:  
-   ```bash
-   git clone https://github.com/raffreitas/ecomm.git
-   cd ecomm
-   ```
-
-2. Configure as variáveis de ambiente para cada serviço. Ou utilize a padrão para desenvolvimento local disponível no arquivo `appsettings.Development.json.`.
-
-3. Suba os containers com o Docker Compose:  
-   ```bash
-   docker compose up -d
-   ```
- 
-4. Acesse a documentação das APIs através do Scalar:  
-   - Catalog: [http://localhost:8080/scalar/v1](http://localhost:8080/scalar/v1)  
-   - Customers: [http://localhost:8081/scalar/v1](http://localhost:8081/scalar/v1)  
-   - Order: [http://localhost:8082/scalar/v1](http://localhost:8082/scalar/v1)  
-   - Payments: [http://localhost:8083/scalar/v1](http://localhost:8083/scalar/v1)  
-
-
----
-
-## 🚀 Funcionalidades
-
-- CRUD de produtos e categorias.  
-- Fluxo de criação de pedidos com publicação e consumo de mensagens.  
-- Processamento de pagamentos integrado.
-
----
-
-## 📢 Contribuições
-
-Sinta-se à vontade para abrir **issues** ou enviar **pull requests** para melhorar este projeto.
+A geração do Bicep permanece bloqueada até confirmar subscription e região, permitindo validar políticas e quotas antes de escolher SKUs e capacidade. Nenhuma implantação Azure é executada automaticamente.

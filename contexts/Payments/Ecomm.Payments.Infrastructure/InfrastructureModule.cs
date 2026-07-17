@@ -1,8 +1,5 @@
-﻿using Ecomm.Payments.Application.Abstractions;
-using Ecomm.Payments.Domain.Repositories;
-using Ecomm.Payments.Domain.Services;
-using Ecomm.Payments.Infrastructure.MessageBus;
-using Ecomm.Payments.Infrastructure.MessageBus.Consumers;
+using Ecomm.Messaging;
+using Ecomm.Payments.Application.Abstractions;
 using Ecomm.Payments.Infrastructure.Payments.Services;
 using Ecomm.Payments.Infrastructure.Payments.Settings;
 using Ecomm.Payments.Infrastructure.Persistence;
@@ -18,45 +15,26 @@ public static class InfrastructureModule
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        return services
-            .AddDatabase(configuration)
-            .AddRepositories()
-            .AddRabbitMq(configuration)
-            .AddPayment(configuration);
-    }
-
-    private static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
-    {
         services.AddDbContext<PaymentsDbContext>(options =>
-        {
-            options.UseNpgsql(configuration.GetConnectionString("DatabaseConnection"));
-        });
-        return services;
-    }
-
-    private static IServiceCollection AddRepositories(this IServiceCollection services)
-    {
+            options.UseNpgsql(configuration.GetConnectionString("DatabaseConnection")));
+        services.AddSingleton(TimeProvider.System);
         services.AddScoped<IPaymentRepository, PaymentRepository>();
 
-        return services;
-    }
+        services.Configure<OutboxOptions>(configuration.GetSection(OutboxOptions.SectionName));
+        services.AddServiceBusTransport(configuration);
+        services.AddSingleton<IOutboxStore, EfOutboxStore<PaymentsDbContext>>();
+        services.AddHostedService<OutboxDispatcher>();
 
-    private static IServiceCollection AddRabbitMq(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddScoped<IMessageBusService, RabbitMqMessageBusService>();
-        services.AddHostedService<OrderCreatedConsumer>();
-        return services;
-    }
-
-    private static IServiceCollection AddPayment(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.Configure<PaymentSettings>(o =>
-            {
-                o.ApiKey = configuration["Payments:ApiKey"] ?? string.Empty;
-                o.BaseUrl = configuration["Payments:BaseUrl"] ?? string.Empty;
-            })
+        services.Configure<PaymentSettings>(configuration.GetSection("Payments"))
             .AddOptionsWithValidateOnStart<PaymentSettings>();
-        services.AddScoped<IPaymentService, AsassPaymentService>();
+        services.AddHttpClient<IPaymentService, AsassPaymentService>((serviceProvider, client) =>
+        {
+            var settings = serviceProvider.GetRequiredService<Microsoft.Extensions.Options.IOptions<PaymentSettings>>().Value;
+            client.BaseAddress = new Uri(settings.BaseUrl);
+            client.Timeout = TimeSpan.FromSeconds(15);
+            client.DefaultRequestHeaders.Add("access_token", settings.ApiKey);
+            client.DefaultRequestHeaders.Add("User-Agent", "Ecomm.Payments");
+        });
 
         return services;
     }

@@ -32,14 +32,12 @@ public sealed class CreateProductHandler(
             throw new NotFoundException("Category not found");
         }
 
-        var product = new Product
-        {
-            Name = request.Name,
-            Description = request.Description,
-            Price = request.Price,
-            ImageUrl = request.ImageUrl,
-            CategoryId = request.CategoryId,
-        };
+        var product = Product.Create(
+            request.Name,
+            request.Description,
+            request.Price,
+            request.ImageUrl,
+            request.CategoryId);
 
         var integrationEvent = new ProductCreatedIntegrationEvent(
             product.Id,
